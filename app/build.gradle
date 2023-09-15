@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.example.go4lunch'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.go4lunch"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -18,9 +18,12 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        viewBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,4 +39,16 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //ROOM
+
+    implementation "androidx.room:room-runtime:2.5.2"
+    androidTestImplementation 'androidx.test.ext:junit:1.2.0-alpha01'
+
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+
+
+    //VIEW MODEL & LIVE DATA
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }

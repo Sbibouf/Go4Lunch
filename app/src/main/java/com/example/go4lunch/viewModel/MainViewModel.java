@@ -1,4 +1,4 @@
 package com.example.go4lunch.viewModel;
 
-public class ViewModel1 {
+public class MainViewModel {
 }
