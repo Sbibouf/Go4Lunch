@@ -5,15 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.go4lunch.R;
+import com.example.go4lunch.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
+
+
+    @Override
+    ActivityMainBinding getViewBinding() {
+        return null;
+    }
+
     /**
      * First commit
      * @param savedInstanceState
      */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+   public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
