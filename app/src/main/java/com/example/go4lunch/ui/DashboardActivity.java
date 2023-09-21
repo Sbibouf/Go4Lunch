@@ -28,7 +28,11 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> {
     private void configureViewPager(){
         PageAdapter adapter = new PageAdapter(getSupportFragmentManager(),getLifecycle());
         binding.viewpager.setAdapter(adapter);
+        int[] iconList = new int[]{R.drawable.ic_baseline_map_24, R.drawable.ic_baseline_view_list_24, R.drawable.ic_baseline_people_24};
 
-        new TabLayoutMediator(binding.tabLayout, binding.viewpager,((tab, position) -> tab.setText("object" + (position+1)))).attach();
+        new TabLayoutMediator(binding.tabLayout, binding.viewpager,
+                ((tab, position) -> tab.setText(getResources().getStringArray(R.array.tablayout_title)[position]).setIcon(iconList[position])))
+                .attach();
+
     }
 }

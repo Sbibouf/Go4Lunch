@@ -5,4 +5,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Tablayout title name -->
+    <string-array name="tablayout_title">
+        <item>Map View</item>
+        <item>List View</item>
+        <item>Workmates</item>
+
+    </string-array>
+
 </resources>
