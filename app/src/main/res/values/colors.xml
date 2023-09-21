@@ -7,4 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#039BE5</color>
+    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorAccent">#FFA000</color>
+    <color name="colorError">#FF5252</color>
+
+    <color name="colorGreen">#6BB18C</color>
+    <color name="colorSandLight">#ECDAAF</color>
+    <color name="colorSand">#EBCB94</color>
+
+    <!-- Array of colors that will be used by ViewPager as background colors -->
+    <array name="colorPagesViewPager">
+        <item>#EDD9CF</item>
+        <item>#BED4D6</item>
+        <item>#ADCEB7</item>
+        <item>#F7CF8B</item>
+        <item>#FD96A2</item>
+    </array>
 </resources>

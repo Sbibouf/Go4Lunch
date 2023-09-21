@@ -13,4 +13,43 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- NOTIFICATION SERVICE -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_title">"Vous avez reçu une notification"</string>
+
+    <!-- MAIN ACTIVITY -->
+    <string name="error_not_connected">Vous devez vous connecter !</string>
+    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
+    <string name="error_no_internet">Aucune connexion internet !</string>
+    <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
+    <string name="connection_succeed">Authentification réussie !</string>
+    <string name="button_login_text_logged">Afficher le profil</string>
+    <string name="button_login_text_not_logged">Connexion</string>
+
+    <!-- STYLE SIGN-IN ACTIVITY -->
+    <style name="LoginTheme" parent="Theme.Go4Lunch">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/darker_gray</item>
+        <item name="colorControlHighlight">@android:color/darker_gray</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:windowBackground">@drawable/table_flou</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+    </style>
+
+    <!-- Firebase Logo -->
+    <style name="FirebaseUI.AuthMethodPicker.Logo">
+
+        <item name="tint"> @color/white</item>
+        <item name="android:minWidth"> 200dp</item>
+        <item name="android:layout_gravity"> bottom</item>
+    </style>
 </resources>
