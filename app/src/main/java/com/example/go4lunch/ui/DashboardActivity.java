@@ -9,6 +9,7 @@ import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.PageAdapter;
 import com.example.go4lunch.databinding.ActivityDashboardBinding;
 import com.example.go4lunch.ui.fragments.MapFragment;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> {
 
@@ -20,13 +21,14 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
         this.configureViewPager();
 
     }
 
     private void configureViewPager(){
-        binding.viewpager.setAdapter(new PageAdapter(getSupportFragmentManager(),getLifecycle()) {
-        });
+        PageAdapter adapter = new PageAdapter(getSupportFragmentManager(),getLifecycle());
+        binding.viewpager.setAdapter(adapter);
+
+        new TabLayoutMediator(binding.tabLayout, binding.viewpager,((tab, position) -> tab.setText("object" + (position+1)))).attach();
     }
 }

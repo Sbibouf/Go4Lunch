@@ -1,6 +1,7 @@
 package com.example.go4lunch.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +10,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.go4lunch.ui.fragments.MapFragment;
+import com.example.go4lunch.ui.fragments.WorkMatesFragment;
 
 public class PageAdapter extends FragmentStateAdapter {
 
@@ -24,7 +26,7 @@ public class PageAdapter extends FragmentStateAdapter {
             case 0:
                 return MapFragment.newInstance();
             case 1:
-                return MapFragment.newInstance();
+                return WorkMatesFragment.newInstance();
             default:
                 return null;
         }
@@ -32,6 +34,8 @@ public class PageAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
+
+
 }
