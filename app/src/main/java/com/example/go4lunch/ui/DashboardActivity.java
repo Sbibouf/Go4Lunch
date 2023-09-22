@@ -2,6 +2,8 @@ package com.example.go4lunch.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -14,13 +16,20 @@ import com.example.go4lunch.ui.fragments.ListFragment;
 import com.example.go4lunch.ui.fragments.MapFragment;
 import com.example.go4lunch.ui.fragments.WorkMatesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener{
 
     MapFragment mMapFragment = new MapFragment();
     ListFragment mListFragment = new ListFragment();
     WorkMatesFragment mWorkMatesFragment = new WorkMatesFragment();
+
+    //FOR DESIGN
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     ActivityDashboardBinding getViewBinding() {
@@ -30,7 +39,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
       //  this.configureViewPager();
 
@@ -63,6 +72,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         }
         return false;
     }
+
+
+
 
     // private void configureViewPager(){
    //     PageAdapter adapter = new PageAdapter(getSupportFragmentManager(),getLifecycle());

@@ -29,6 +29,7 @@
 
     <!-- STYLE SIGN-IN ACTIVITY -->
     <style name="LoginTheme" parent="Theme.Go4Lunch">
+        <item name="android:editTextStyle">@style/FirebaseUI.EditText</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -37,12 +38,12 @@
         <item name="colorControlActivated">@android:color/darker_gray</item>
         <item name="colorControlHighlight">@android:color/darker_gray</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textColorPrimary">@android:color/darker_gray</item>
-        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
         <item name="android:windowBackground">@drawable/table_flou</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textColorHint">@color/white</item>
     </style>
 
     <!-- Firebase Logo -->
@@ -51,6 +52,19 @@
         <item name="tint"> @color/white</item>
         <item name="android:minWidth"> 200dp</item>
         <item name="android:layout_gravity"> bottom</item>
+    </style>
+
+    <!-- Firebase UI Edidtext -->
+    <style name="FirebaseUI.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="android:background">@null</item>
+
+    </style>
+    <style name="AppTheme.FirebaseUI" parent="FirebaseUI">
+        <item name="android:editTextStyle">@style/FirebaseUI.EditText</item>
+        <!-- Autres attributs personnalisés de FirebaseUI si nécessaire -->
     </style>
 
 
