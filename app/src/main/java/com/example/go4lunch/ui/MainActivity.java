@@ -125,6 +125,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if(mUserManager.isCurrentUserLogged()){
             binding.button2.setText("C'est parti");
         }
+        else {
+            binding.button2.setText("Se connecter");
+        }
     }
 
     public void startDashboardActivity(){

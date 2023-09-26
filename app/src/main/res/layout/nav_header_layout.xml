@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_project"
+        <ImageView
+            android:id="@+id/iv_user_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
@@ -33,34 +33,35 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:src="@mipmap/ic_bol_foreground"
-            tools:tint="@color/white" />
+            tools:tint="@color/white"
+            android:contentDescription="user avatar" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/img_project"
+            android:layout_toEndOf="@+id/iv_user_avatar"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/lbl_task_name"
+                android:id="@+id/tv_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                tools:text="NOM PRENOM" />
+                android:text="NOM PRENOM" />
 
             <TextView
-                android:id="@+id/lbl_project_name"
+                android:id="@+id/tv_user_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                tools:text="ADRESS EMAIL" />
+                android:text="ADRESS EMAIL" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

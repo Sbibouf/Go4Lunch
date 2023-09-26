@@ -8,10 +8,18 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.PageAdapter;
 import com.example.go4lunch.databinding.ActivityDashboardBinding;
@@ -24,6 +32,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.net.URI;
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -36,6 +47,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    View headerView;
+    ImageView mUserAvatar;
+
 
     @Override
     ActivityDashboardBinding getViewBinding() {
@@ -45,6 +59,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        headerView = binding.activityMainNavView.getHeaderView(0);
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
         this.configureToolBar();
@@ -52,6 +67,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         this.configureDrawerLayout();
 
         this.configureNavigationView();
+
+        this.updateDrawerWithUserData();
       //  this.configureViewPager();
 
     }
@@ -128,6 +145,46 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.activity_main_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    // 4 - Update drawer layout with user name, avatar and mail
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void updateDrawerWithUserData(){
+
+        mUserAvatar = headerView.findViewById(R.id.iv_user_avatar);
+
+        if(mUserManager.isCurrentUserLogged()){
+            FirebaseUser user = mUserManager.getCurrentUser();
+            if(user.getPhotoUrl()!=null){
+                setUserPhoto(user.getPhotoUrl());
+            }
+            else {
+
+                mUserAvatar.setImageResource(R.mipmap.ic_avatar);
+            }
+            setTextUserData(user);
+        }
+
+    }
+
+    private void setUserPhoto(Uri userPhoto){
+        Glide.with(this)
+                .load(userPhoto)
+                .apply(RequestOptions.circleCropTransform())
+                .into(mUserAvatar);
+    }
+
+    private void setTextUserData(FirebaseUser user){
+
+        TextView userName = headerView.findViewById(R.id.tv_user_name);
+        TextView userMail = headerView.findViewById(R.id.tv_user_mail);
+
+        String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
+        String name = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
+
+        userName.setText(name);
+        userMail.setText(email);
     }
 
 

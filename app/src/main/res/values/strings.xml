@@ -16,5 +16,10 @@
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="info_no_email_found">no email found</string>
+    <string name="info_no_username_found">no user name found</string>
+
+    <!-- App color -->
+    <string name="App_color">#FC7540</string>
 
 </resources>

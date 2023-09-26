@@ -62,6 +62,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
     implementation "com.google.android.gms:play-services-auth:20.7.0"
 
+    //Firestore
+    implementation 'com.google.firebase:firebase-firestore'
+
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
 

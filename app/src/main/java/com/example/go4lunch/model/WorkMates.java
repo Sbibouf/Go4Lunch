@@ -10,7 +10,7 @@ public class WorkMates {
     /**
      * Variables name, lastName, avatar
      */
-    private String name, lastName, avatar, choice;
+    private String name, avatar, choice;
 
     @PrimaryKey
     private Long id;
@@ -19,9 +19,8 @@ public class WorkMates {
      * Constructor
      */
 
-    public WorkMates(String name, String lastName, String avatar, String choice, Long id) {
+    public WorkMates(String name, String avatar, String choice, Long id) {
         this.name = name;
-        this.lastName = lastName;
         this.avatar = avatar;
         this.choice = choice;
         this.id = id;
@@ -37,14 +36,6 @@ public class WorkMates {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getAvatar() {
