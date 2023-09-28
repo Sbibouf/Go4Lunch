@@ -1,5 +1,7 @@
 package com.example.go4lunch.ui;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
 
+    private ActivityResultLauncher<Intent> mSignInLauncher;
     private static final int RC_SIGN_IN = 123;
     private UserManager mUserManager = UserManager.getInstance();
 
@@ -37,6 +40,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        signInLauncher();
         setupListeners();
 
     }
@@ -64,7 +68,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         });
     }
 
+    public void signInLauncher(){
+        mSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+            if(result.getResultCode()==RESULT_OK){
+                startDashboardActivity();
+            }
+        });
+    }
+
     public void startSignInActivity(){
+
 
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers =
@@ -72,15 +85,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         new AuthUI.IdpConfig.GoogleBuilder().build());
 
         // Launch the activity
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
-                        .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.mipmap.ic_bol_foreground)
-                        .build(),
-                RC_SIGN_IN);
+        mSignInLauncher.launch(AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setTheme(R.style.LoginTheme)
+                .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(false, true)
+                .setLogo(R.mipmap.ic_bol_foreground)
+                .build());
     }
 
     @Override
