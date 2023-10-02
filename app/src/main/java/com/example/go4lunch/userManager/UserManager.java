@@ -2,6 +2,7 @@ package com.example.go4lunch.userManager;
 
 import android.content.Context;
 
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.repositories.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,19 @@ public class UserManager {
             }
             return instance;
         }
+    }
+
+    public void createUser(){
+        userRepository.createUser();
+    }
+
+    public Task<User> getUserData(){
+        // Get the user from Firestore and cast it to a User model Object
+        return userRepository.getUserData().continueWith(task -> task.getResult().toObject(User.class)) ;
+    }
+
+    public Task<Void> updateUsername(String username){
+        return userRepository.updateUsername(username);
     }
 
     public Boolean isCurrentUserLogged() {

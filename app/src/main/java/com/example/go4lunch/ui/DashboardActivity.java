@@ -2,14 +2,11 @@ package com.example.go4lunch.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,27 +18,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.adapter.PageAdapter;
 import com.example.go4lunch.databinding.ActivityDashboardBinding;
 import com.example.go4lunch.ui.fragments.ListFragment;
 import com.example.go4lunch.ui.fragments.MapFragment;
-import com.example.go4lunch.ui.fragments.WorkMatesFragment;
+import com.example.go4lunch.ui.fragments.UsersFragment;
 import com.example.go4lunch.userManager.UserManager;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.net.URI;
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
     private UserManager mUserManager = UserManager.getInstance();
     MapFragment mMapFragment = new MapFragment();
     ListFragment mListFragment = new ListFragment();
-    WorkMatesFragment mWorkMatesFragment = new WorkMatesFragment();
+    UsersFragment mUsersFragment = new UsersFragment();
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -69,7 +61,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         this.configureNavigationView();
 
         this.updateDrawerWithUserData();
-      //  this.configureViewPager();
 
     }
 
@@ -106,7 +97,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
             case R.id.workmates:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, mWorkMatesFragment)
+                        .replace(R.id.activity_main_frame_layout, mUsersFragment)
                         .commit();
                 return true;
 
@@ -180,6 +171,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         TextView userName = headerView.findViewById(R.id.tv_user_name);
         TextView userMail = headerView.findViewById(R.id.tv_user_mail);
 
+
         String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
         String name = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
 
@@ -188,16 +180,4 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     }
 
 
-
-
-    // private void configureViewPager(){
-   //     PageAdapter adapter = new PageAdapter(getSupportFragmentManager(),getLifecycle());
-   //     binding.viewpager.setAdapter(adapter);
-   //     int[] iconList = new int[]{R.drawable.ic_baseline_map_24, R.drawable.ic_baseline_view_list_24, R.drawable.ic_baseline_people_24};
-    //
-      //  new TabLayoutMediator(binding.tabLayout, binding.viewpager,
-        //        ((tab, position) -> tab.setText(getResources().getStringArray(R.array.tablayout_title)[position]).setIcon(iconList[position])))
-          //      .attach();
-
-    //}
 }

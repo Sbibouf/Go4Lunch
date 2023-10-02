@@ -3,7 +3,6 @@ package com.example.go4lunch.ui;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> {
+public class LoginActivity extends BaseActivity<ActivityMainBinding> {
 
 
     private ActivityResultLauncher<Intent> mSignInLauncher;
@@ -72,6 +71,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         mSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
             if(result.getResultCode()==RESULT_OK){
                 startDashboardActivity();
+                mUserManager.createUser();
             }
         });
     }
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public void startDashboardActivity(){
 
-        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
 
     }

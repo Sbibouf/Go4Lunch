@@ -4,32 +4,42 @@ package com.example.go4lunch.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "WorkMates")
-public class WorkMates {
+
+public class User {
 
     /**
      * Variables name, lastName, avatar
      */
-    private String name, avatar, choice;
+    private String name, avatar, choice, email, id;
 
-    @PrimaryKey
-    private Long id;
+
 
     /**
-     * Constructor
+     * Constructors
      */
 
-    public WorkMates(String name, String avatar, String choice, Long id) {
+    public User(String id, String name, String avatar, String email ) {
         this.name = name;
         this.avatar = avatar;
-        this.choice = choice;
         this.id = id;
+        this.email = email;
+    }
+
+    public User() {
     }
 
     /**
      * Getters and setters
      */
 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public String getName() {
         return name;
     }
@@ -54,11 +64,11 @@ public class WorkMates {
         return choice;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }
