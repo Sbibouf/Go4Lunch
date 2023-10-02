@@ -16,15 +16,22 @@ import com.example.go4lunch.model.User;
 import com.example.go4lunch.ui.fragments.UsersFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>  {
 
 
-    private ArrayList<User> usersList;
+    private List<User> usersList;
 
 
-    public UsersAdapter(ArrayList<User> usersList) {
-        this.usersList = usersList;
+    public UsersAdapter() {
+        usersList = new ArrayList<>() ;
+    }
+
+    private void updateUsers(List<User> users){
+        this.usersList.clear();
+        this.usersList.addAll(users);
+        notifyDataSetChanged();
     }
 
     @NonNull

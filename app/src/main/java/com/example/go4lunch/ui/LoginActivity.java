@@ -3,6 +3,7 @@ package com.example.go4lunch.ui;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMainBinding;
 import com.example.go4lunch.userManager.UserManager;
+import com.example.go4lunch.viewModel.LoginViewModel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -24,7 +26,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
 
     private ActivityResultLauncher<Intent> mSignInLauncher;
     private static final int RC_SIGN_IN = 123;
-    private UserManager mUserManager = UserManager.getInstance();
+    private LoginViewModel mLoginViewModel;
 
     @Override
     ActivityMainBinding getViewBinding() {
@@ -39,31 +41,46 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
     @Override
    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initViewModel();
         signInLauncher();
-        setupListeners();
+        checkIfUserIsLogged();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateLoginButton();
+        checkIfUserIsLogged();
     }
 
-    public void setupListeners(){
+    public void initViewModel(){
 
-        binding.button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mLoginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        mLoginViewModel.fetchData();
+    }
 
-                if(mUserManager.isCurrentUserLogged()){
-                    startDashboardActivity();
+    public void checkIfUserIsLogged(){
 
-                }
-                else {
-                    startSignInActivity();
-                }
+        mLoginViewModel.isCurrentUserLogged().observe(this, loggedIn->{
+            if(loggedIn){
+                binding.button2.setText("C'est parti");
             }
+            else{
+                binding.button2.setText("Se connecter");
+
+            }
+            binding.button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(loggedIn){
+                        startDashboardActivity();
+                    }
+                    else{
+                        startSignInActivity();
+                    }
+
+                }
+            });
         });
     }
 
@@ -71,7 +88,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         mSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
             if(result.getResultCode()==RESULT_OK){
                 startDashboardActivity();
-                mUserManager.createUser();
+                mLoginViewModel.createUser();
             }
         });
     }
@@ -128,16 +145,6 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
                     }
                 }
             }
-        }
-    }
-
-    public void updateLoginButton(){
-
-        if(mUserManager.isCurrentUserLogged()){
-            binding.button2.setText("C'est parti");
-        }
-        else {
-            binding.button2.setText("Se connecter");
         }
     }
 

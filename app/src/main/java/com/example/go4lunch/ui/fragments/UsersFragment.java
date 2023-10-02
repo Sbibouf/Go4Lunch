@@ -64,9 +64,9 @@ public class UsersFragment extends Fragment {
                 mUsers.add(user);
             }
 
-            // Mettez à jour la RecyclerView avec les données
-            RecyclerView recyclerView = getView().findViewById(R.id.list_workmates); // Remplacez R.id.recycler_view par l'ID de votre RecyclerView
-            UsersAdapter adapter = new UsersAdapter(mUsers);
+            // Mise à jour la RecyclerView avec les données
+            RecyclerView recyclerView = getView().findViewById(R.id.list_workmates);
+            UsersAdapter adapter = new UsersAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }).addOnFailureListener(e -> {

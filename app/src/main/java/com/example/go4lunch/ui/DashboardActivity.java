@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import com.example.go4lunch.ui.fragments.ListFragment;
 import com.example.go4lunch.ui.fragments.MapFragment;
 import com.example.go4lunch.ui.fragments.UsersFragment;
 import com.example.go4lunch.userManager.UserManager;
+import com.example.go4lunch.viewModel.DashboardViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -30,7 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
-    private UserManager mUserManager = UserManager.getInstance();
+    private DashboardViewModel mDashboardViewModel;
     MapFragment mMapFragment = new MapFragment();
     ListFragment mListFragment = new ListFragment();
     UsersFragment mUsersFragment = new UsersFragment();
@@ -54,13 +56,11 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         headerView = binding.activityMainNavView.getHeaderView(0);
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
-        this.configureToolBar();
-
-        this.configureDrawerLayout();
-
-        this.configureNavigationView();
-
-        this.updateDrawerWithUserData();
+        initViewModel();
+        configureToolBar();
+        configureDrawerLayout();
+        configureNavigationView();
+        updateDrawerWithUserData();
 
     }
 
@@ -103,7 +103,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
             case R.id.logout:
 
-                mUserManager.signOut(DashboardActivity.this).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDashboardViewModel.signOut(DashboardActivity.this).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         finish();
@@ -117,6 +117,14 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     // ---------------------
     // CONFIGURATION
     // ---------------------
+
+
+    // 0 - Initialisation du ViewModel
+
+    private void initViewModel(){
+        mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        mDashboardViewModel.fetchUser();
+    }
 
     // 1 - Configure Toolbar
     private void configureToolBar(){
@@ -144,9 +152,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     private void updateDrawerWithUserData(){
 
         mUserAvatar = headerView.findViewById(R.id.iv_user_avatar);
+        TextView userName = headerView.findViewById(R.id.tv_user_name);
+        TextView userMail = headerView.findViewById(R.id.tv_user_mail);
 
-        if(mUserManager.isCurrentUserLogged()){
-            FirebaseUser user = mUserManager.getCurrentUser();
+        mDashboardViewModel.getUserMutableLiveData().observe(this, user->{
+            userName.setText(user.getDisplayName());
+            userMail.setText(user.getEmail());
             if(user.getPhotoUrl()!=null){
                 setUserPhoto(user.getPhotoUrl());
             }
@@ -154,9 +165,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
                 mUserAvatar.setImageResource(R.mipmap.ic_avatar);
             }
-            setTextUserData(user);
-        }
-
+        });
     }
 
     private void setUserPhoto(Uri userPhoto){
