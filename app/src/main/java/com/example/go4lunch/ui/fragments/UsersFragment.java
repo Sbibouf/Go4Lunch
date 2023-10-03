@@ -2,7 +2,10 @@ package com.example.go4lunch.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,12 +15,15 @@ import android.view.ViewGroup;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.UsersAdapter;
+import com.example.go4lunch.databinding.FragmentWorkMatesBinding;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.viewModel.UsersViewModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +32,10 @@ import java.util.ArrayList;
  */
 public class UsersFragment extends Fragment {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference usersCollection = db.collection("users");
     ArrayList<User> mUsers = new ArrayList<>();
+    UsersViewModel mUsersViewModel;
+    FragmentWorkMatesBinding mFragmentWorkMatesBinding;
+    private UsersAdapter mAdapter;
 
 
 
@@ -52,31 +59,47 @@ public class UsersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getFirestoreUsers();
-        return inflater.inflate(R.layout.fragment_work_mates, container, false);
+
+        mFragmentWorkMatesBinding = FragmentWorkMatesBinding.inflate(inflater, container, false);
+        View view = mFragmentWorkMatesBinding.getRoot();
+        //initViewModel();
+        //initRecyclerView();
+        //getUsers();
+        return view;
     }
 
-    private void getFirestoreUsers(){
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initRecyclerView();
+        initViewModel();
+        getUsers();
+    }
 
-        usersCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                User user = documentSnapshot.toObject(User.class);
-                mUsers.add(user);
-            }
+    public void initViewModel(){
+        mUsersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
+        mUsersViewModel.fetchUsersData();
+    }
 
-            // Mise à jour la RecyclerView avec les données
-            RecyclerView recyclerView = getView().findViewById(R.id.list_workmates);
-            UsersAdapter adapter = new UsersAdapter();
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        }).addOnFailureListener(e -> {
-            // Gérez les erreurs de récupération des données ici
-        });
+    private void initRecyclerView(){
+
+        mAdapter = new UsersAdapter();
+        mFragmentWorkMatesBinding.listWorkmates.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        mFragmentWorkMatesBinding.listWorkmates.setAdapter(mAdapter);
+
+    }
+
+    private void getUsers(){
+        mUsersViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), this::updateUsers);
+    }
+
+    private void updateUsers(List<User>users){
+        this.mAdapter.updateUsers(users);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUsers.clear();
+        //mUsers.clear();
     }
 }

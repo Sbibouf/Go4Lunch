@@ -28,7 +28,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         usersList = new ArrayList<>() ;
     }
 
-    private void updateUsers(List<User> users){
+    public void updateUsers(List<User> users){
         this.usersList.clear();
         this.usersList.addAll(users);
         notifyDataSetChanged();
