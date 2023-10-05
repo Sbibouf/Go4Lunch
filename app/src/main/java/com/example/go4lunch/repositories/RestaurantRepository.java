@@ -46,17 +46,7 @@ public class RestaurantRepository {
         Restaurant resto = new Restaurant(latitude,longitude,name, id);
         this.getRestaurantsCollection().document(id).set(resto);
 
-        Task<DocumentSnapshot> restaurantData;
 
     }
 
-    public Task<DocumentSnapshot> getRestaurantData(String id){
-        if(id!=null){
-            return this.getRestaurantsCollection().document(id).get();
-        }
-        else{
-            return null;
-        }
-
-    }
 }
