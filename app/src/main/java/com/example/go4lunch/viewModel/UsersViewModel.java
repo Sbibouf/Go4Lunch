@@ -37,7 +37,7 @@ public class UsersViewModel extends ViewModel {
             }
             mListMutableLiveData.setValue(mUsers);
         }).addOnFailureListener(e -> {
-            // Gérez les erreurs de récupération des données ici
+            // Erreurs de récupération des données
         });
 
     }
