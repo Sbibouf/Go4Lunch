@@ -2,13 +2,20 @@ package com.example.go4lunch.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.go4lunch.R;
+import com.example.go4lunch.adapter.ListRestaurantsAdapter;
+import com.example.go4lunch.databinding.FragmentListBinding;
+import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
+import com.example.go4lunch.viewModel.UsersViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,16 +24,18 @@ import com.example.go4lunch.R;
  */
 public class ListFragment extends Fragment {
 
+    NearByRestaurantViewModel mNearByRestaurantViewModel;
+    FragmentListBinding mFragmentListBinding;
+    private ListRestaurantsAdapter mAdapter;
 
     public ListFragment() {
         // Required empty public constructor
     }
 
 
-    // TODO: Rename and change types and number of parameters
+
     public static ListFragment newInstance() {
-        ListFragment fragment = new ListFragment();
-        return fragment;
+        return new ListFragment();
     }
 
     @Override
@@ -38,6 +47,20 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        mFragmentListBinding = FragmentListBinding.inflate(inflater, container, false);
+        View view = mFragmentListBinding.getRoot();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //initRecyclerView();
+        initViewModel();
+        //getRestaurant();
+    }
+
+    public void initViewModel(){
+        mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
     }
 }

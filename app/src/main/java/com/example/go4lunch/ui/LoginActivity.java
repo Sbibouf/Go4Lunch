@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
     @Override
    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initViewModel();
+        mLoginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         signInLauncher();
         checkIfUserIsLogged();
 
@@ -53,34 +53,25 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         checkIfUserIsLogged();
     }
 
-    public void initViewModel(){
-
-        mLoginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        mLoginViewModel.fetchData();
-    }
 
     public void checkIfUserIsLogged(){
 
-        mLoginViewModel.isCurrentUserLogged().observe(this, loggedIn->{
-            if(loggedIn){
-                binding.button2.setText("C'est parti");
-            }
-            else{
-                binding.button2.setText("Se connecter");
-
-            }
-            binding.button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(loggedIn){
-                        startDashboardActivity();
-                    }
-                    else{
-                        startSignInActivity();
-                    }
-
+        if(mLoginViewModel.isCurrentUserLogged()){
+            binding.button2.setText("C'est parti");
+        }
+        else{
+            binding.button2.setText("Se connecter");
+        }
+        binding.button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mLoginViewModel.isCurrentUserLogged()){
+                    startDashboardActivity();
                 }
-            });
+                else {
+                    startSignInActivity();
+                }
+            }
         });
     }
 

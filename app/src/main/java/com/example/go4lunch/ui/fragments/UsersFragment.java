@@ -32,7 +32,6 @@ import java.util.List;
  */
 public class UsersFragment extends Fragment {
 
-    ArrayList<User> mUsers = new ArrayList<>();
     UsersViewModel mUsersViewModel;
     FragmentWorkMatesBinding mFragmentWorkMatesBinding;
     private UsersAdapter mAdapter;

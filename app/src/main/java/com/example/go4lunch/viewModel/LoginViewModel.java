@@ -11,16 +11,11 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginViewModel extends ViewModel {
 
     private final UserManager mUserManager = UserManager.getInstance();
-    private MutableLiveData<Boolean> mMutableLiveData = new MutableLiveData<>();
 
-    public LiveData<Boolean> isCurrentUserLogged(){
-        return mMutableLiveData;
+    public Boolean isCurrentUserLogged(){
+        return mUserManager.isCurrentUserLogged();
     }
 
-    public void fetchData(){
-        Boolean isLogged = mUserManager.isCurrentUserLogged();
-        mMutableLiveData.setValue(isLogged);
-    }
 
     public void createUser(){
         mUserManager.createUser();

@@ -56,15 +56,10 @@ public class NearByRestaurantRepository {
                         double restaurantLong = restaurants.getResults().get(i).getGeometry().getLocation().getLng();
                         String restaurantName = restaurants.getResults().get(i).getName();
                         String restaurantID = restaurants.getResults().get(i).getPlaceId();
-                        String restaurantVicinity = restaurants.getResults().get(i).getVicinity();
-
-                        LatLng restaurantLatLng = new LatLng(restaurantLat,restaurantLong);
 
                         mRestaurantRepository.createRestaurant(restaurantLat, restaurantLong, restaurantName, restaurantID);
 
                     }
-                } else {
-                    // Gérez les réponses d'erreur ici
                 }
             }
 
