@@ -1,5 +1,6 @@
 package com.example.go4lunch.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.ListRestaurantsAdapter;
 import com.example.go4lunch.databinding.FragmentListBinding;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.service.ItemClickSupport;
+import com.example.go4lunch.ui.DetailRestaurantActivity;
 import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
 import com.example.go4lunch.viewModel.UsersViewModel;
 
@@ -61,7 +65,8 @@ public class ListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
         initViewModel();
-        //getRestaurant();
+        configureOnRecyclerView();
+
     }
 
     public void initViewModel(){
@@ -76,4 +81,19 @@ public class ListFragment extends Fragment {
     }
 
     private void updateList(List<Restaurant> restaurants){ this.mAdapter.updateRestaurant(restaurants);}
+
+    private void configureOnRecyclerView(){
+        ItemClickSupport.addTo(mFragmentListBinding.listRestaurant, R.layout.fragment_list)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Restaurant restaurant = mAdapter.getRestaurant(position);
+                        Intent intent = new Intent(getActivity(), DetailRestaurantActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("restaurant", restaurant);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
+                });
+    }
 }

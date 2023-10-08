@@ -1,7 +1,8 @@
 package com.example.go4lunch.service;
 
 
-import com.example.go4lunch.Pojo.NearbyRestaurant;
+import com.example.go4lunch.pojo.detailRestaurant.DetailRestaurantApi;
+import com.example.go4lunch.pojo.restaurants.NearbyRestaurant;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -15,5 +16,8 @@ public interface RestaurantApi {
                                           @Query("type") String type, // "restaurant"
                                           @Query("key") String apiKey);
 
+    @GET("maps/api/place/detail/json?fields=name%2Crating%2Cformatted_phone_number%2Cwebsite")
+    Call<DetailRestaurantApi> getRestaurantDetail(@Query("placeId") String placeId,
+                                                  @Query("key") String apiKey);
 }
 

@@ -1,6 +1,8 @@
 package com.example.go4lunch.model;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
 
     /**
      * Variable name, adress, type, grade

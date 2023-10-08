@@ -1,5 +1,6 @@
 package com.example.go4lunch.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,11 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.UsersAdapter;
 import com.example.go4lunch.databinding.FragmentWorkMatesBinding;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.service.ItemClickSupport;
+import com.example.go4lunch.ui.DetailRestaurantActivity;
 import com.example.go4lunch.viewModel.UsersViewModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -73,6 +78,7 @@ public class UsersFragment extends Fragment {
         initRecyclerView();
         initViewModel();
         getUsers();
+        configureOnRecyclerView();
     }
 
     public void initViewModel(){
@@ -100,5 +106,27 @@ public class UsersFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         //mUsers.clear();
+    }
+
+    private void configureOnRecyclerView(){
+
+        ItemClickSupport.addTo(mFragmentWorkMatesBinding.listWorkmates, R.layout.fragment_work_mates)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        User user = mAdapter.getUser(position);
+                        Intent intent = new Intent(getActivity(), DetailRestaurantActivity.class);
+                        if(user.getChoice()!=null){
+                            String userChoice = user.getChoice();
+                            Bundle b = new Bundle();
+                            b.putSerializable("userChoice", userChoice);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                        Toast.makeText(requireContext(),""+user.getName()+" n'a pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
     }
 }

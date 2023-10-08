@@ -1,12 +1,9 @@
 
-package com.example.go4lunch.Pojo;
+package com.example.go4lunch.pojo.restaurants;
 
 import java.util.List;
 
 
-import com.example.go4lunch.Pojo.Geometry;
-import com.example.go4lunch.Pojo.OpeningHours;
-import com.example.go4lunch.Pojo.PlusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

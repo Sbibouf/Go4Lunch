@@ -2,31 +2,22 @@ package com.example.go4lunch.repositories;
 
 import static com.example.go4lunch.BuildConfig.MAPS_API_KEY;
 
-import android.content.Context;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.go4lunch.Pojo.NearbyRestaurant;
-import com.example.go4lunch.Pojo.OpeningHours;
-import com.example.go4lunch.Pojo.Photo;
+import com.example.go4lunch.model.DetailRestaurant;
+import com.example.go4lunch.pojo.detailRestaurant.DetailRestaurantApi;
+import com.example.go4lunch.pojo.restaurants.NearbyRestaurant;
+import com.example.go4lunch.pojo.restaurants.OpeningHours;
+import com.example.go4lunch.pojo.restaurants.Photo;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.service.DetailRestaurantCallback;
 import com.example.go4lunch.service.RestaurantApi;
 import com.example.go4lunch.service.RestaurantCallback;
 import com.example.go4lunch.service.RetrofitService;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-
-import javax.inject.Inject;
-
 
 
 import retrofit2.Call;
@@ -39,6 +30,7 @@ public class NearByRestaurantRepository {
     private final RestaurantApi mRestaurantApi;
     private static volatile NearByRestaurantRepository instance;
     private List<Restaurant> mRestaurantList = new ArrayList<>();
+    private DetailRestaurant mDetailRestaurant;
 
 
     // Constructor
@@ -117,6 +109,28 @@ public class NearByRestaurantRepository {
 
             }
         });
+    }
+
+    public void getDetailRestaurantFromApi(String placeId, DetailRestaurantCallback callback){
+
+        Call<DetailRestaurantApi> detailRestaurantCall = mRestaurantApi.getRestaurantDetail(placeId,MAPS_API_KEY);
+        detailRestaurantCall.enqueue(new Callback<DetailRestaurantApi>() {
+            @Override
+            public void onResponse(Call<DetailRestaurantApi> call, Response<DetailRestaurantApi> response) {
+                DetailRestaurantApi detailRestaurantApi = response.body();
+                String name = detailRestaurantApi.getResult().getName();
+                String phone = detailRestaurantApi.getResult().getFormattedPhoneNumber();
+                int rating = detailRestaurantApi.getResult().getRating();
+                mDetailRestaurant = new DetailRestaurant(name, phone, rating);
+                callback.OnRestaurantDetailReceived(mDetailRestaurant);
+            }
+
+            @Override
+            public void onFailure(Call<DetailRestaurantApi> call, Throwable t) {
+
+            }
+        });
+
     }
 
 }

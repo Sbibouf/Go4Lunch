@@ -1,10 +1,8 @@
 
-package com.example.go4lunch.Pojo;
+package com.example.go4lunch.pojo.restaurants;
 
 
 
-import com.example.go4lunch.Pojo.Northeast;
-import com.example.go4lunch.Pojo.Southwest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

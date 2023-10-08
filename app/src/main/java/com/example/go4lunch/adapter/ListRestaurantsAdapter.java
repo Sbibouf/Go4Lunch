@@ -96,5 +96,9 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
         }
     }
 
+    public Restaurant getRestaurant(int position){
+        return mRestaurantList.get(position);
+    }
+
 
 }

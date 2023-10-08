@@ -4,8 +4,10 @@ package com.example.go4lunch.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 
-public class User {
+
+public class User implements Serializable {
 
     /**
      * Variables name, lastName, avatar

@@ -1,12 +1,12 @@
 
-package com.example.go4lunch.Pojo;
+package com.example.go4lunch.pojo.restaurants;
 
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Northeast {
+public class Location {
 
     @SerializedName("lat")
     @Expose

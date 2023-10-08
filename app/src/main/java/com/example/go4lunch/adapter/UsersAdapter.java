@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.ui.fragments.UsersFragment;
 
@@ -95,6 +96,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             }
 
         }
+    }
+
+    public User getUser(int position){
+        return usersList.get(position);
     }
 
 
