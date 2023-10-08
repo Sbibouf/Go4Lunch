@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/Layout"
+        android:id="@+id/restaurant_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="8dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/avatar_detail"
+            android:id="@+id/restaurant_detail_photo"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:scaleType="centerCrop"
@@ -26,18 +26,19 @@
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ajouter_favoris"
+        android:id="@+id/add_restaurant_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="340dp"
+        android:src="@drawable/ic_choose_waiting_foreground"
         android:background="@android:drawable/editbox_background"
-        android:backgroundTint="#EDEDED"
+        android:backgroundTint="@color/white"
         android:clickable="true"
         android:contentDescription="etoile_favoris"
         app:borderWidth="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Layout"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurant_detail_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_layout"
         app:layout_constraintVertical_bias="0.695" />
 
 
@@ -49,18 +50,19 @@
         android:background="@android:color/transparent"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="@+id/Layout"
-        app:layout_constraintStart_toStartOf="@+id/Layout"
-        app:layout_constraintTop_toTopOf="@+id/Layout"
+        app:layout_constraintEnd_toEndOf="@+id/restaurant_detail_layout"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_detail_layout"
+        app:layout_constraintTop_toTopOf="@+id/restaurant_detail_layout"
         tools:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/titre_layout"
+        android:layout_height="80dp"
+        android:id="@+id/title_restaurant_detail_layout"
         android:orientation="vertical"
         android:background="@color/app_color"
-        app:layout_constraintTop_toBottomOf="@id/Layout"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_detail_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -71,11 +73,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/title_restaurant_detail"
+                android:textSize="16sp"
                 android:text="Titre resto"
                 android:textColor="@color/white"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:id="@+id/rating_restaurant_detail"
                 android:src="@drawable/ic_baseline_map_24"
                 android:contentDescription="note"/>
 
@@ -84,59 +90,74 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description resto"
+            android:id="@+id/address_restaurant_detail"
+            android:textSize="12sp"
+            android:text="Address restaurant"
             android:textColor="@color/white"/>
     </LinearLayout>
 
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="80dp"
         android:id="@+id/boutton_layout"
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titre_layout">
+        app:layout_constraintTop_toBottomOf="@+id/title_restaurant_detail_layout">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="match_parent">
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/white"
+                android:layout_weight="1"
+                android:contentDescription="call_button"
                 android:src="@drawable/ic_baseline_phone_24"/>
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/white"
+                android:layout_weight="1"
+                android:contentDescription="like_button"
                 android:src="@drawable/ic_baseline_star_24"/>
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/white"
+                android:layout_weight="1"
+                android:contentDescription="website_button"
                 android:src="@drawable/ic_baseline_globe_24"/>
         </TableRow>
 
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="match_parent">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/app_color"
+                android:text="CALL"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/app_color"
+                android:text="LIKE"/>
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Call"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Like"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Website"/>
+                android:textColor="@color/app_color"
+                android:layout_weight="1"
+                android:text="WEBSITE"/>
         </TableRow>
 
         <TableRow

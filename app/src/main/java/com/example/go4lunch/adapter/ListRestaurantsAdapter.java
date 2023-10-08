@@ -1,5 +1,6 @@
 package com.example.go4lunch.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurantsAdapter.ViewHolder> {
 
@@ -41,6 +45,8 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        Restaurant restaurant = mRestaurantList.get(position);
+        holder.bind(restaurant);
     }
 
     @Override
@@ -67,6 +73,25 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
         public void bind(Restaurant restaurant){
 
             mTitre.setText(restaurant.getName());
+            mAdress.setText(restaurant.getAddress());
+            if(restaurant.getOpen()){
+                mOpeningHours.setText("Is Open");
+                mOpeningHours.setTextColor(Color.GREEN);
+            }else{
+                mOpeningHours.setText("Closed");
+                mOpeningHours.setTextColor(Color.RED);
+            }
+            mDistance.setText(restaurant.getDistance()+"m");
+
+            if(Objects.equals(restaurant.getPhotoUrl(), "")){
+                mPhoto.setImageResource(R.drawable.ic_no_photo_foreground);
+            }
+            else{
+                Glide.with(itemView.getContext())
+                        .load(restaurant.getPhotoUrl())
+                        .apply(RequestOptions.centerCropTransform())
+                        .into(mPhoto);
+            }
 
         }
     }

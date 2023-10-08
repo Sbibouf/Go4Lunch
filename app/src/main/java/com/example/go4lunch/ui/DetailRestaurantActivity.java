@@ -5,12 +5,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.go4lunch.R;
+import com.example.go4lunch.databinding.ActivityDetailRestaurantBinding;
 
-public class DetailRestaurantActivity extends AppCompatActivity {
+public class DetailRestaurantActivity extends BaseActivity<ActivityDetailRestaurantBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    ActivityDetailRestaurantBinding getViewBinding() {
+        return ActivityDetailRestaurantBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_restaurant);
+        initViewModel();
+        initRecyclerView();
+        getDataRestaurant();
+    }
+
+    public void initViewModel(){
+
+    }
+
+
+    public void initRecyclerView(){
+
+
+    }
+
+    public void getDataRestaurant(){
+
+
     }
 }

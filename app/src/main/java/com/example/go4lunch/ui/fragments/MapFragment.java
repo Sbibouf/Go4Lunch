@@ -1,18 +1,13 @@
 package com.example.go4lunch.ui.fragments;
 
-import static com.example.go4lunch.BuildConfig.MAPS_API_KEY;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -20,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.repositories.RestaurantRepository;
-import com.example.go4lunch.ui.DashboardActivity;
 import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,8 +22,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.text.ParseException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,46 +61,26 @@ public class MapFragment extends Fragment {
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
 
                 mMap = googleMap;
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 mMap.clear();
+                mMap.setMyLocationEnabled(true);
 
-                try {
-                    if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-                        ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-
-
-
-                    }
-                    else{
-                        location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        mMap.setMyLocationEnabled(true);
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-
-                    }
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-                try {
-                    mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
-                    mNearByRestaurantViewModel.getNearByRestaurantFromFirestore(latitude,longitude);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
                 mNearByRestaurantViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
                     for(int i=0; i<restaurants.size(); i++ ){
                         LatLng latLng = new LatLng(restaurants.get(i).getLatitude(), restaurants.get(i).getLongitude());
                         mMap.addMarker(new MarkerOptions().position(latLng));
                     }
+                    LatLng startPoint = new LatLng(restaurants.get(0).getLatitude(), restaurants.get(0).getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(startPoint));
                 });
 
-                LatLng currentPosition = new LatLng(latitude, longitude);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
-                mMap.setMinZoomPreference(14);
+                mMap.setMinZoomPreference(16);
             }
         });
 

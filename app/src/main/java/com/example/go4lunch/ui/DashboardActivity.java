@@ -3,11 +3,17 @@ package com.example.go4lunch.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,10 +31,15 @@ import com.example.go4lunch.ui.fragments.MapFragment;
 import com.example.go4lunch.ui.fragments.UsersFragment;
 import com.example.go4lunch.userManager.UserManager;
 import com.example.go4lunch.viewModel.DashboardViewModel;
+import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
+
+
+
+
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -36,6 +47,10 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     MapFragment mMapFragment = new MapFragment();
     ListFragment mListFragment = new ListFragment();
     UsersFragment mUsersFragment = new UsersFragment();
+    private NearByRestaurantViewModel mNearByRestaurantViewModel;
+    private LocationManager mLocationManager;
+    double latitude, longitude;
+    Location location;
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -43,6 +58,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     private NavigationView navigationView;
     View headerView;
     ImageView mUserAvatar;
+
 
 
     @Override
@@ -56,6 +72,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         headerView = binding.activityMainNavView.getHeaderView(0);
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
+        mLocationManager= (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        getPosition();
         initViewModel();
         configureToolBar();
         configureDrawerLayout();
@@ -124,6 +143,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     private void initViewModel(){
         mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         mDashboardViewModel.fetchUser();
+        mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
+        mNearByRestaurantViewModel.fetchData(latitude,longitude);
     }
 
     // 1 - Configure Toolbar
@@ -175,17 +196,25 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
                 .into(mUserAvatar);
     }
 
-    private void setTextUserData(FirebaseUser user){
+    @SuppressLint("MissingPermission")
+    public void getPosition(){
+        try {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
 
-        TextView userName = headerView.findViewById(R.id.tv_user_name);
-        TextView userMail = headerView.findViewById(R.id.tv_user_mail);
 
 
-        String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
-        String name = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
+            }
+            else{
+                location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
 
-        userName.setText(name);
-        userMail.setText(email);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 

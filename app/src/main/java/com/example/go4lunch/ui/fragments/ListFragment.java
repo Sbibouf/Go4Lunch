@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,11 @@ import android.view.ViewGroup;
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.ListRestaurantsAdapter;
 import com.example.go4lunch.databinding.FragmentListBinding;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
 import com.example.go4lunch.viewModel.UsersViewModel;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,12 +59,21 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //initRecyclerView();
+        initRecyclerView();
         initViewModel();
         //getRestaurant();
     }
 
     public void initViewModel(){
-        mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
+        mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
+        mNearByRestaurantViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), this::updateList);
     }
+
+    private void initRecyclerView(){
+        mAdapter = new ListRestaurantsAdapter();
+        mFragmentListBinding.listRestaurant.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        mFragmentListBinding.listRestaurant.setAdapter(mAdapter);
+    }
+
+    private void updateList(List<Restaurant> restaurants){ this.mAdapter.updateRestaurant(restaurants);}
 }

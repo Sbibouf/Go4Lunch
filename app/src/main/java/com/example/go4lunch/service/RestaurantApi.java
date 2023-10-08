@@ -11,7 +11,7 @@ public interface RestaurantApi {
 
     @GET("maps/api/place/nearbysearch/json?")
     Call<NearbyRestaurant> getRestaurants(@Query("location") String location,
-                                          @Query("radius") int radius,
+                                          @Query("rankby") String rankby,
                                           @Query("type") String type, // "restaurant"
                                           @Query("key") String apiKey);
 
