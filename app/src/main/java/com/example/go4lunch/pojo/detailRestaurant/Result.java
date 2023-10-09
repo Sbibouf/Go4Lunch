@@ -8,25 +8,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class Result {
 
-    @SerializedName("formatted_phone_number")
+    @SerializedName("international_phone_number")
     @Expose
-    private String formattedPhoneNumber;
+    private String internationalPhoneNumber;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("rating")
     @Expose
-    private Integer rating;
+    private Float rating;
     @SerializedName("website")
     @Expose
     private String website;
 
-    public String getFormattedPhoneNumber() {
-        return formattedPhoneNumber;
+    public String getInternationalPhoneNumber() {
+        return internationalPhoneNumber;
     }
 
-    public void setFormattedPhoneNumber(String formattedPhoneNumber) {
-        this.formattedPhoneNumber = formattedPhoneNumber;
+    public void setInternationalPhoneNumber(String internationalPhoneNumber) {
+        this.internationalPhoneNumber = internationalPhoneNumber;
     }
 
     public String getName() {
@@ -37,11 +37,11 @@ public class Result {
         this.name = name;
     }
 
-    public Integer getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 

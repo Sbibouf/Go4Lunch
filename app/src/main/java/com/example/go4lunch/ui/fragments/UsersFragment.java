@@ -83,7 +83,7 @@ public class UsersFragment extends Fragment {
 
     public void initViewModel(){
         mUsersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
-        mUsersViewModel.fetchUsersData();
+        mUsersViewModel.fetcUsers();
     }
 
     private void initRecyclerView(){

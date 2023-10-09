@@ -1,18 +1,22 @@
 package com.example.go4lunch.repositories;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.go4lunch.model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +25,9 @@ public final class UserRepository {
     private static final String COLLECTION_NAME = "users";
     private static final String USERNAME_FIELD = "username";
     private static volatile UserRepository instance;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference usersCollection = db.collection("users");
+
 
     private UserRepository() { }
 
@@ -91,5 +98,22 @@ public final class UserRepository {
     public Task<Void> deleteUser(Context context) {
 
         return AuthUI.getInstance().delete(context);
+    }
+
+    public Task<List<User>> getAllUsers(){
+
+
+        TaskCompletionSource<List<User>> taskCompletionSource = new TaskCompletionSource<>();
+        List<User> usersList = new ArrayList<>();
+
+        usersCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                User user = documentSnapshot.toObject(User.class);
+                usersList.add(user);
+            }
+            taskCompletionSource.setResult(usersList);
+        }).addOnFailureListener(taskCompletionSource::setException);
+
+        return taskCompletionSource.getTask();
     }
 }

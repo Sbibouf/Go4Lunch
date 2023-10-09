@@ -56,7 +56,7 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView mTitre, mAdress, mOpeningHours, mDistance;
+        TextView mTitre, mAdress, mOpeningHours, mDistance, mUsersList;
         ImageView mIcone, mFav, mPhoto;
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,6 +69,7 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
             mIcone = itemView.findViewById(R.id.icone_resto);
             mFav = itemView.findViewById(R.id.fav_resto);
             mPhoto = itemView.findViewById(R.id.iv_restaurant);
+            mUsersList = itemView.findViewById(R.id.users_choice);
         }
         public void bind(Restaurant restaurant){
 
@@ -92,6 +93,7 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
                         .apply(RequestOptions.centerCropTransform())
                         .into(mPhoto);
             }
+            mUsersList.setText(""+restaurant.getUsersList().size());
 
         }
     }

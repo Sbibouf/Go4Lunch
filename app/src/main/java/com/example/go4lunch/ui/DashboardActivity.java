@@ -145,6 +145,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         mDashboardViewModel.fetchUser();
         mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
         mNearByRestaurantViewModel.fetchData(latitude,longitude);
+        mNearByRestaurantViewModel.fetchUsers();
+        mNearByRestaurantViewModel.fetchUsersListRestaurant();
     }
 
     // 1 - Configure Toolbar

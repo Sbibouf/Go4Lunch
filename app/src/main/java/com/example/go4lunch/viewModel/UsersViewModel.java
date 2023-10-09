@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.UsersAdapter;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.repositories.UserRepository;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -17,8 +18,7 @@ import java.util.List;
 
 public class UsersViewModel extends ViewModel {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference usersCollection = db.collection("users");
+    UserRepository mUserRepository = UserRepository.getInstance();
 
     MutableLiveData<List<User>> mListMutableLiveData = new MutableLiveData<>();
 
@@ -26,18 +26,13 @@ public class UsersViewModel extends ViewModel {
         return mListMutableLiveData;
     }
 
-    public void fetchUsersData(){
 
-        List<User> mUsers = new ArrayList<>();
+    public void fetcUsers(){
 
-        usersCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                User user = documentSnapshot.toObject(User.class);
-                mUsers.add(user);
-            }
-            mListMutableLiveData.setValue(mUsers);
+        mUserRepository.getAllUsers().addOnSuccessListener(users -> {
+            mListMutableLiveData.setValue(users);
         }).addOnFailureListener(e -> {
-            // Erreurs de récupération des données
+
         });
 
     }

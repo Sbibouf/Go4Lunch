@@ -12,7 +12,7 @@ public class User implements Serializable {
     /**
      * Variables name, lastName, avatar
      */
-    private String name, avatar, choice, email, id;
+    private String name, avatar, choice, email, id, choiceId;
 
 
 
@@ -25,6 +25,9 @@ public class User implements Serializable {
         this.avatar = avatar;
         this.id = id;
         this.email = email;
+        choice = "";
+        choiceId = "";
+
     }
 
     public User() {
@@ -72,5 +75,13 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getChoiceId() {
+        return choiceId;
+    }
+
+    public void setChoiceId(String choiceId) {
+        this.choiceId = choiceId;
     }
 }

@@ -3,6 +3,7 @@ package com.example.go4lunch.repositories;
 import static com.example.go4lunch.BuildConfig.MAPS_API_KEY;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.example.go4lunch.model.DetailRestaurant;
 import com.example.go4lunch.pojo.detailRestaurant.DetailRestaurantApi;
@@ -113,21 +114,32 @@ public class NearByRestaurantRepository {
 
     public void getDetailRestaurantFromApi(String placeId, DetailRestaurantCallback callback){
 
-        Call<DetailRestaurantApi> detailRestaurantCall = mRestaurantApi.getRestaurantDetail(placeId,MAPS_API_KEY);
+        Call<DetailRestaurantApi> detailRestaurantCall = mRestaurantApi.getRestaurantDetail(""+placeId,MAPS_API_KEY);
+        String url = detailRestaurantCall.request().url().toString();
+        Log.d("DetailRestaurantCall", "Request URL: " + url);
         detailRestaurantCall.enqueue(new Callback<DetailRestaurantApi>() {
             @Override
             public void onResponse(Call<DetailRestaurantApi> call, Response<DetailRestaurantApi> response) {
                 DetailRestaurantApi detailRestaurantApi = response.body();
                 String name = detailRestaurantApi.getResult().getName();
-                String phone = detailRestaurantApi.getResult().getFormattedPhoneNumber();
-                int rating = detailRestaurantApi.getResult().getRating();
-                mDetailRestaurant = new DetailRestaurant(name, phone, rating);
+                String phone = "";
+                String website = "";
+                if(detailRestaurantApi.getResult().getInternationalPhoneNumber()!=null){
+                    phone = detailRestaurantApi.getResult().getInternationalPhoneNumber();
+                }else if (detailRestaurantApi.getResult().getWebsite()!=null){
+                    website = detailRestaurantApi.getResult().getWebsite();
+                }
+
+
+                float rating = detailRestaurantApi.getResult().getRating();
+                mDetailRestaurant = new DetailRestaurant(name, phone, rating, website);
                 callback.OnRestaurantDetailReceived(mDetailRestaurant);
             }
 
             @Override
             public void onFailure(Call<DetailRestaurantApi> call, Throwable t) {
 
+                Log.e("DetailRestaurantCall", "Call failed: " + t.getMessage());
             }
         });
 

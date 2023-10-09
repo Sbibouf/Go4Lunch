@@ -1,6 +1,8 @@
 package com.example.go4lunch.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Restaurant implements Serializable {
 
@@ -11,6 +13,7 @@ public class Restaurant implements Serializable {
     private double latitude;
     private double longitude;
     private Boolean isOpen;
+    private List<User> usersList;
 
 
 
@@ -25,6 +28,7 @@ public class Restaurant implements Serializable {
         this.isOpen = isOpen;
         this.distance = distance;
         this.photoUrl = photoUrl;
+        this.usersList = new ArrayList<>();
     }
 
     public Restaurant(){
@@ -97,5 +101,13 @@ public class Restaurant implements Serializable {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public List<User> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
     }
 }

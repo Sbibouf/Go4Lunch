@@ -2,13 +2,14 @@ package com.example.go4lunch.model;
 
 public class DetailRestaurant {
 
-    String name, phone_number;
-    int rating;
+    String name, phone_number, website;
+    float rating;
 
-    public DetailRestaurant(String name, String phone_number, int rating) {
+    public DetailRestaurant(String name, String phone_number, float rating, String website) {
         this.name = name;
         this.phone_number = phone_number;
         this.rating = rating;
+        this.website= website;
     }
 
     public String getName() {
@@ -27,11 +28,19 @@ public class DetailRestaurant {
         this.phone_number = phone_number;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }
