@@ -71,7 +71,9 @@ public class ListFragment extends Fragment {
 
     public void initViewModel(){
         mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
+        mNearByRestaurantViewModel.fetchUsersListRestaurant();
         mNearByRestaurantViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), this::updateList);
+
     }
 
     private void initRecyclerView(){

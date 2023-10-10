@@ -12,8 +12,7 @@
     <FrameLayout
         android:id="@+id/restaurant_detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="402dp"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,16 +30,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_choose_waiting_foreground"
-        android:background="@android:drawable/editbox_background"
+        android:tintMode="src_in"
+        app:srcCompat="@drawable/ic_choose_restaurant"
+        app:borderWidth="0dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:contentDescription="etoile_favoris"
-        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/restaurant_detail_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_layout"
-        app:layout_constraintVertical_bias="0.695" />
+        app:layout_constraintVertical_bias="0.695"
+        android:focusable="true" />
 
 
     <androidx.appcompat.widget.Toolbar
@@ -61,7 +61,7 @@
         android:layout_height="80dp"
         android:id="@+id/title_restaurant_detail_layout"
         android:orientation="vertical"
-        android:background="@color/app_color"
+        android:background="@color/app_color2"
         android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/restaurant_detail_layout"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:id="@+id/rating_restaurant_detail"
-                android:src="@drawable/ic_baseline_map_24"
+                android:src="@drawable/ic_rating_restaurant"
                 android:contentDescription="note"/>
 
         </LinearLayout>
@@ -118,7 +118,8 @@
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
                 android:contentDescription="call_button"
-                android:src="@drawable/ic_baseline_phone_24"/>
+                android:src="@drawable/ic_baseline_phone_24"
+                app:tint="@color/app_color2" />
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -126,7 +127,8 @@
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
                 android:contentDescription="like_button"
-                android:src="@drawable/ic_baseline_star_24"/>
+                android:src="@drawable/ic_baseline_star_24"
+                app:tint="@color/app_color2"/>
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -134,7 +136,8 @@
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
                 android:contentDescription="website_button"
-                android:src="@drawable/ic_baseline_globe_24"/>
+                android:src="@drawable/ic_baseline_globe_24"
+                app:tint="@color/app_color2"/>
         </TableRow>
 
 
@@ -146,20 +149,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/app_color"
+                android:textColor="@color/app_color2"
                 android:text="CALL"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/app_color"
+                android:textColor="@color/app_color2"
                 android:text="LIKE"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/app_color"
+                android:textColor="@color/app_color2"
                 android:layout_weight="1"
                 android:text="WEBSITE"/>
         </TableRow>
@@ -183,15 +186,17 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider2">
+        app:layout_constraintTop_toBottomOf="@id/divider2"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/users_choice_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/work_mates"/>
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.go4lunch.model.DetailRestaurant;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.repositories.NearByRestaurantRepository;
 import com.example.go4lunch.service.DetailRestaurantCallback;
@@ -14,7 +15,7 @@ public class DetailRestaurantViewModel extends ViewModel {
 
     NearByRestaurantRepository mNearByRestaurantRepository;
     MutableLiveData<DetailRestaurant> mMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<List<User>> mListMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<Restaurant> mRestaurantMutableLivedata = new MutableLiveData<>();
 
     public DetailRestaurantViewModel() {
         mNearByRestaurantRepository = NearByRestaurantRepository.getInstance();
@@ -32,5 +33,5 @@ public class DetailRestaurantViewModel extends ViewModel {
     public MutableLiveData<DetailRestaurant> getMutableLiveData(){
         return mMutableLiveData;
     }
-    public MutableLiveData<List<User>> getListMutableLiveData() { return mListMutableLiveData;}
+    public MutableLiveData<Restaurant> getRestaurantMutableLivedata() { return mRestaurantMutableLivedata;}
 }

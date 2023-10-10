@@ -3,6 +3,7 @@ package com.example.go4lunch.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,11 +14,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
+import com.example.go4lunch.adapter.UsersChoiceAdapter;
 import com.example.go4lunch.databinding.ActivityDetailRestaurantBinding;
 import com.example.go4lunch.model.DetailRestaurant;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.viewModel.DetailRestaurantViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 public class DetailRestaurantActivity extends AppCompatActivity {
@@ -29,6 +33,7 @@ public class DetailRestaurantActivity extends AppCompatActivity {
     private String phone_number = "";
     private String website = "";
     private DetailRestaurantViewModel mDetailRestaurantViewModel;
+    private UsersChoiceAdapter mAdapter;
 
 
     @Override
@@ -40,6 +45,7 @@ public class DetailRestaurantActivity extends AppCompatActivity {
         initViewModel();
         initRecyclerView();
         getDataRestaurant();
+        updateUsersChoice(restaurant.getUsersList());
 
         mActivityDetailRestaurantBinding.callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +80,9 @@ public class DetailRestaurantActivity extends AppCompatActivity {
 
     public void initRecyclerView(){
 
+        mAdapter = new UsersChoiceAdapter();
+        mActivityDetailRestaurantBinding.usersChoiceList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        mActivityDetailRestaurantBinding.usersChoiceList.setAdapter(mAdapter);
 
     }
 
@@ -106,6 +115,10 @@ public class DetailRestaurantActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void updateUsersChoice(List<User> users){
+        this.mAdapter.updateRestaurant(users);
     }
 
 
