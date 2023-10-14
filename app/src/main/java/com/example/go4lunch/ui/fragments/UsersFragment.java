@@ -116,14 +116,14 @@ public class UsersFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         User user = mAdapter.getUser(position);
                         Intent intent = new Intent(getActivity(), DetailRestaurantActivity.class);
-                        if(user.getChoice()!=null){
-                            String userChoice = user.getChoice();
-                            Bundle b = new Bundle();
-                            b.putSerializable("userChoice", userChoice);
-                            intent.putExtras(b);
+                        if(user.getChoiceId()!=null){
+                            String userChoice = user.getChoiceId();
+                            intent.putExtra("placeId", userChoice);
                             startActivity(intent);
+                        }else{
+                            Toast.makeText(requireContext(),""+user.getName()+" n'a pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(requireContext(),""+user.getName()+" n'a pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
+
 
                     }
                 });

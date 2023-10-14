@@ -42,6 +42,10 @@ public class UserManager {
         return userRepository.updateUsername(username);
     }
 
+    public Task<Void> updateUserChoice(String placeId){
+        return userRepository.updateUserChoice(placeId);
+    }
+
     public Boolean isCurrentUserLogged() {
         return (userRepository.getCurrentUser()!=null);
     }

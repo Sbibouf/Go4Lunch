@@ -49,7 +49,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        //mLocationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
     }
 

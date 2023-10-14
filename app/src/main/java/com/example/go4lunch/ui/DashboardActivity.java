@@ -44,9 +44,9 @@ import com.google.firebase.auth.FirebaseUser;
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
     private DashboardViewModel mDashboardViewModel;
-    MapFragment mMapFragment = new MapFragment();
-    ListFragment mListFragment = new ListFragment();
-    UsersFragment mUsersFragment = new UsersFragment();
+    MapFragment mMapFragment = MapFragment.newInstance();
+    ListFragment mListFragment = ListFragment.newInstance();
+    UsersFragment mUsersFragment = UsersFragment.newInstance();
     private NearByRestaurantViewModel mNearByRestaurantViewModel;
     private LocationManager mLocationManager;
     double latitude, longitude;
@@ -141,6 +141,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     // 0 - Initialisation du ViewModel
 
     private void initViewModel(){
+
         mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         mDashboardViewModel.fetchUser();
         mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
@@ -201,10 +202,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     public void getPosition(){
         try {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-
-
-
             }
             else{
                 location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

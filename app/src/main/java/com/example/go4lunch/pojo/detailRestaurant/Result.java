@@ -5,6 +5,8 @@ package com.example.go4lunch.pojo.detailRestaurant;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 
 public class Result {
 
@@ -14,9 +16,18 @@ public class Result {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("photos")
+    @Expose
+    private List<PhotoDetail> mPhotoDetails;
+    @SerializedName("place_id")
+    @Expose
+    private String place_id;
     @SerializedName("rating")
     @Expose
     private Float rating;
+    @SerializedName("vicinity")
+    @Expose
+    private String vicinity;
     @SerializedName("website")
     @Expose
     private String website;
@@ -53,4 +64,27 @@ public class Result {
         this.website = website;
     }
 
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
+    }
+
+    public List<PhotoDetail> getPhotos() {
+        return mPhotoDetails;
+    }
+
+    public void setPhotos(List<PhotoDetail> photoDetails) {
+        this.mPhotoDetails = photoDetails;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
+    }
 }

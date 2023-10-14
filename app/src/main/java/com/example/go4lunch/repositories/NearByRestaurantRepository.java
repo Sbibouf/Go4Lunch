@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.go4lunch.model.DetailRestaurant;
 import com.example.go4lunch.pojo.detailRestaurant.DetailRestaurantApi;
+import com.example.go4lunch.pojo.detailRestaurant.PhotoDetail;
 import com.example.go4lunch.pojo.restaurants.NearbyRestaurant;
 import com.example.go4lunch.pojo.restaurants.OpeningHours;
 import com.example.go4lunch.pojo.restaurants.Photo;
@@ -122,17 +123,27 @@ public class NearByRestaurantRepository {
             public void onResponse(Call<DetailRestaurantApi> call, Response<DetailRestaurantApi> response) {
                 DetailRestaurantApi detailRestaurantApi = response.body();
                 String name = detailRestaurantApi.getResult().getName();
+                String id = detailRestaurantApi.getResult().getPlace_id();
                 String phone = "";
                 String website = "";
+                String address = detailRestaurantApi.getResult().getVicinity();
+                List<PhotoDetail> photoRef = new ArrayList<>();
+                String photoReference ="";
+                String photoUrl = "";
+                photoRef = detailRestaurantApi.getResult().getPhotos();
                 if(detailRestaurantApi.getResult().getInternationalPhoneNumber()!=null){
                     phone = detailRestaurantApi.getResult().getInternationalPhoneNumber();
                 }else if (detailRestaurantApi.getResult().getWebsite()!=null){
                     website = detailRestaurantApi.getResult().getWebsite();
                 }
+                if(photoRef!=null){
+                    photoReference = photoRef.get(0).getPhotoReference();
+                    photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+ photoReference + "&key="+MAPS_API_KEY;
+                }
 
 
                 float rating = detailRestaurantApi.getResult().getRating();
-                mDetailRestaurant = new DetailRestaurant(name, phone, rating, website);
+                mDetailRestaurant = new DetailRestaurant(name, phone, rating, website, id, address, photoUrl);
                 callback.OnRestaurantDetailReceived(mDetailRestaurant);
             }
 

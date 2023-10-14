@@ -81,6 +81,7 @@ public class NearByRestaurantViewModel extends ViewModel {
             }
             mRestaurantList.get(i).setUsersList(mUserListRestaurant);
         }
+        mMutableLiveData.setValue(mRestaurantList);
 
 
 

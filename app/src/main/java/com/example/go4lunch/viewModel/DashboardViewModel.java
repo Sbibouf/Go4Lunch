@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.userManager.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +21,7 @@ public class DashboardViewModel extends ViewModel {
 
     public void fetchUser(){
 
+        //User user2 = mUserManager.getUserData();
         FirebaseUser user = mUserManager.getCurrentUser();
         mUserMutableLiveData.setValue(user);
     }

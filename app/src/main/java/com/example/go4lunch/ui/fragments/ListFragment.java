@@ -66,7 +66,6 @@ public class ListFragment extends Fragment {
         initRecyclerView();
         initViewModel();
         configureOnRecyclerView();
-
     }
 
     public void initViewModel(){
@@ -91,11 +90,15 @@ public class ListFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Restaurant restaurant = mAdapter.getRestaurant(position);
                         Intent intent = new Intent(getActivity(), DetailRestaurantActivity.class);
-                        Bundle b = new Bundle();
-                        b.putSerializable("restaurant", restaurant);
-                        intent.putExtras(b);
+                        String placeId = restaurant.getId();
+                        intent.putExtra("placeId", placeId);
                         startActivity(intent);
                     }
                 });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

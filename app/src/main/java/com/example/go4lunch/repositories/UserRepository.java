@@ -24,6 +24,8 @@ public final class UserRepository {
 
     private static final String COLLECTION_NAME = "users";
     private static final String USERNAME_FIELD = "username";
+    private static final String USERCHOICEID_FIELD = "choiceId";
+    private static final String USERCHOICE_FIELD = "choice";
     private static volatile UserRepository instance;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersCollection = db.collection("users");
@@ -85,6 +87,16 @@ public final class UserRepository {
         return this.getUsersCollection().document(uid).update(USERNAME_FIELD, username);
     }
 
+    public Task<Void> updateUserChoiceId(String placeId){
+        String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
+        return this.getUsersCollection().document(uid).update(USERCHOICEID_FIELD, placeId);
+    }
+
+    public Task<Void> updateUserChoice(String placeName){
+        String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
+        return this.getUsersCollection().document(uid).update(USERCHOICE_FIELD, placeName);
+    }
+
     @Nullable
     public FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
@@ -102,7 +114,6 @@ public final class UserRepository {
 
     public Task<List<User>> getAllUsers(){
 
-
         TaskCompletionSource<List<User>> taskCompletionSource = new TaskCompletionSource<>();
         List<User> usersList = new ArrayList<>();
 
@@ -114,6 +125,23 @@ public final class UserRepository {
             taskCompletionSource.setResult(usersList);
         }).addOnFailureListener(taskCompletionSource::setException);
 
+        return taskCompletionSource.getTask();
+    }
+
+    public Task<List<User>> getRestaurantUsers(String place_id){
+
+        TaskCompletionSource<List<User>> taskCompletionSource = new TaskCompletionSource<>();
+        List<User> userList = new ArrayList<>();
+        usersCollection.whereEqualTo("choiceId", place_id)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        User user = documentSnapshot.toObject(User.class);
+                        userList.add(user);
+                    }
+                    taskCompletionSource.setResult(userList);
+                })
+                .addOnFailureListener(taskCompletionSource::setException);
         return taskCompletionSource.getTask();
     }
 }

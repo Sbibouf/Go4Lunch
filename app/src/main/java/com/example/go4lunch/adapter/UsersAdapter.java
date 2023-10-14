@@ -1,5 +1,6 @@
 package com.example.go4lunch.adapter;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,11 +89,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                         .into(imgAvatar);
             }
 
-            if(user.getChoice()==null){
+            if(user.getChoiceId()==null){
                 choiceWorkmate.setText(""+user.getName()+" hasn't decided yet");
+                choiceWorkmate.setTypeface(null, Typeface.ITALIC);
+
+
             }
             else{
-                choiceWorkmate.setText(""+user.getName()+" is eating " + user.getChoice());
+                choiceWorkmate.setText(""+user.getName()+" is eating at " + user.getChoice()+" today");
             }
 
         }

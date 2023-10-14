@@ -67,7 +67,6 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
             mOpeningHours = itemView.findViewById(R.id.heure_resto);
             mDistance = itemView.findViewById(R.id.distance_resto);
             mIcone = itemView.findViewById(R.id.icone_resto);
-            mFav = itemView.findViewById(R.id.fav_resto);
             mPhoto = itemView.findViewById(R.id.iv_restaurant);
             mUsersList = itemView.findViewById(R.id.users_choice);
         }

@@ -16,7 +16,7 @@ public interface RestaurantApi {
                                           @Query("type") String type, // "restaurant"
                                           @Query("key") String apiKey);
 
-    @GET("maps/api/place/details/json?fields=name%2Crating%2Cinternational_phone_number%2Cwebsite")
+    @GET("maps/api/place/details/json?fields=name%2Crating%2Cinternational_phone_number%2Cwebsite%2Cvicinity%2Cphotos")
     Call<DetailRestaurantApi> getRestaurantDetail(@Query("place_id") String placeId,
                                                   @Query("key") String apiKey);
 }
