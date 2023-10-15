@@ -83,4 +83,9 @@ dependencies {
     //Leak Canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
+    //Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
+    implementation 'com.google.firebase:firebase-analytics'
+
 }

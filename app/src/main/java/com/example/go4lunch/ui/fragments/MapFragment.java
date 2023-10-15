@@ -1,9 +1,6 @@
 package com.example.go4lunch.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
+import com.example.go4lunch.viewModel.DashboardListMapViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,10 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment {
 
     private GoogleMap mMap;
-    LocationManager mLocationManager;
-    double latitude, longitude;
-    Location location;
-    NearByRestaurantViewModel mNearByRestaurantViewModel;
+    DashboardListMapViewModel mDashboardListMapViewModel;
 
     public MapFragment() {
         // Required empty public constructor
@@ -49,8 +43,6 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mLocationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-
     }
 
     @Override
@@ -70,8 +62,8 @@ public class MapFragment extends Fragment {
                 mMap.clear();
                 mMap.setMyLocationEnabled(true);
 
-                mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
-                mNearByRestaurantViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
+                mDashboardListMapViewModel = new ViewModelProvider(requireActivity()).get(DashboardListMapViewModel.class);
+                mDashboardListMapViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
                     for(int i=0; i<restaurants.size(); i++ ){
                         LatLng latLng = new LatLng(restaurants.get(i).getLatitude(), restaurants.get(i).getLongitude());
                         mMap.addMarker(new MarkerOptions().position(latLng));
@@ -88,5 +80,9 @@ public class MapFragment extends Fragment {
         return rootView;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("I'm Hungry!");
+    }
 }

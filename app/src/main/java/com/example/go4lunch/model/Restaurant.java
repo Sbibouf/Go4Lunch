@@ -10,16 +10,16 @@ public class Restaurant implements Serializable {
      * Variable name, adress, type, grade
      */
     private String name, id, address, distance, photoUrl;
-    private double latitude;
-    private double longitude;
+    private double latitude, longitude;
+    private int rating;
     private Boolean isOpen;
-    private List<User> usersList;
+    private int custumersNumber;
 
 
 
     //Constructor
 
-    public Restaurant(double latitude, double longitude, String name, String id, String address, Boolean isOpen, String distance, String photoUrl) {
+    public Restaurant(double latitude, double longitude, String name, String id, String address, Boolean isOpen, String distance, String photoUrl, int rating) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -28,7 +28,8 @@ public class Restaurant implements Serializable {
         this.isOpen = isOpen;
         this.distance = distance;
         this.photoUrl = photoUrl;
-        this.usersList = new ArrayList<>();
+        this.rating = rating;
+        this.custumersNumber = 0;
     }
 
     public Restaurant(){
@@ -103,11 +104,20 @@ public class Restaurant implements Serializable {
         this.photoUrl = photoUrl;
     }
 
-    public List<User> getUsersList() {
-        return usersList;
+
+    public int getCustumersNumber() {
+        return custumersNumber;
     }
 
-    public void setUsersList(List<User> usersList) {
-        this.usersList = usersList;
+    public void setCustumersNumber(int custumersNumber) {
+        this.custumersNumber = custumersNumber;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

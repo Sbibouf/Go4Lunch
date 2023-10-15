@@ -97,6 +97,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             }
             else{
                 choiceWorkmate.setText(""+user.getName()+" is eating at " + user.getChoice()+" today");
+                choiceWorkmate.setTypeface(null, Typeface.BOLD);
             }
 
         }

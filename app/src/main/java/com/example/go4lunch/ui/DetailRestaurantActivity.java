@@ -28,7 +28,6 @@ import java.util.Objects;
 public class DetailRestaurantActivity extends AppCompatActivity {
 
     private ActivityDetailRestaurantBinding mActivityDetailRestaurantBinding;
-    private Restaurant actualRestaurant;
     private String placeId ="";
     private String placeName = "";
     private String phone_number = "";
@@ -47,6 +46,7 @@ public class DetailRestaurantActivity extends AppCompatActivity {
         initRecyclerView();
         getDetailRestaurant();
         getRestaurantUsers();
+        getCurrentUserData();
 
 
 
@@ -61,6 +61,16 @@ public class DetailRestaurantActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(getApplicationContext(),""+placeName+" n'a pas fournit de numéro", Toast.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+
+        mActivityDetailRestaurantBinding.likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDetailRestaurantViewModel.addLikedRestaurants(placeName);
+                mDetailRestaurantViewModel.getCurrentUserData();
+                getCurrentUserData();
 
             }
         });
@@ -99,6 +109,7 @@ public class DetailRestaurantActivity extends AppCompatActivity {
         mDetailRestaurantViewModel = new ViewModelProvider(this).get(DetailRestaurantViewModel.class);
         mDetailRestaurantViewModel.fetchDatas(placeId);
         mDetailRestaurantViewModel.fetchRestaurantUsers(placeId);
+        mDetailRestaurantViewModel.getCurrentUserData();
     }
 
 
@@ -155,7 +166,26 @@ public class DetailRestaurantActivity extends AppCompatActivity {
     private void updateUsersChoice(List<User> users){
         this.mAdapter.updateRestaurant(users);
     }
+    private void getCurrentUserData(){
+        mDetailRestaurantViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(user.getChoiceId().equals(placeId)){
+                    mActivityDetailRestaurantBinding.addRestaurantDetail.setImageResource(R.drawable.ic_choose_restaurant);
+                }
+                for(int i = 0; i<user.getLikedRestaurants().size(); i++){
+                    if(user.getLikedRestaurants().get(i).equals(placeName)){
+                        mActivityDetailRestaurantBinding.ratingRestaurantDetail.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+    }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDetailRestaurantViewModel.getCurrentUserData();
+        getCurrentUserData();
+    }
 }

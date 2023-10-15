@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class User implements Serializable {
@@ -13,6 +15,7 @@ public class User implements Serializable {
      * Variables name, lastName, avatar
      */
     private String name, avatar, choice, email, id, choiceId;
+    private List<String> likedRestaurants;
 
 
 
@@ -20,13 +23,15 @@ public class User implements Serializable {
      * Constructors
      */
 
-    public User(String id, String name, String avatar, String email ) {
+    public User(String id, String name, String avatar, String email, List<String> likedRestaurants ) {
         this.name = name;
         this.avatar = avatar;
         this.id = id;
         this.email = email;
         choice = "";
         choiceId = "";
+        this.likedRestaurants = likedRestaurants;
+
 
     }
 
@@ -83,5 +88,13 @@ public class User implements Serializable {
 
     public void setChoiceId(String choiceId) {
         this.choiceId = choiceId;
+    }
+
+    public List<String> getLikedRestaurants() {
+        return likedRestaurants;
+    }
+
+    public void setLikedRestaurants(List<String> likedRestaurants) {
+        this.likedRestaurants = likedRestaurants;
     }
 }

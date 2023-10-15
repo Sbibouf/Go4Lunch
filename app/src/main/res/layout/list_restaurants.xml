@@ -103,12 +103,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_rate_5_star"
+                android:visibility="invisible"
+                android:src="@drawable/ic_baseline_star_rating"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_rate_4_star"
+                android:visibility="invisible"
+                android:src="@drawable/ic_baseline_star_rating"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_rate_3_star"
+                android:visibility="invisible"
+                android:src="@drawable/ic_baseline_star_rating"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_rate_2_star"
+                android:visibility="invisible"
+                android:src="@drawable/ic_baseline_star_rating"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/iv_rate_1_star"
-                android:src="@drawable/ic_baseline_star_24"/>
+                android:visibility="invisible"
+                android:src="@drawable/ic_baseline_star_rating"/>
 
         </TableRow>
 

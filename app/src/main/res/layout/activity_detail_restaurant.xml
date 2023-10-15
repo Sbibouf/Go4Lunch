@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:tintMode="src_in"
-        app:srcCompat="@drawable/ic_choose_waiting"
+        android:src="@drawable/ic_choose_waiting"
         app:borderWidth="0dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
@@ -84,6 +84,7 @@
                 android:layout_marginStart="16dp"
                 android:id="@+id/rating_restaurant_detail"
                 android:src="@drawable/ic_rating_restaurant"
+                android:visibility="invisible"
                 android:contentDescription="note"/>
 
         </LinearLayout>

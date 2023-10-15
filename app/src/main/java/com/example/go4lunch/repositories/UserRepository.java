@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -26,6 +27,7 @@ public final class UserRepository {
     private static final String USERNAME_FIELD = "username";
     private static final String USERCHOICEID_FIELD = "choiceId";
     private static final String USERCHOICE_FIELD = "choice";
+    private static final String USERLIKEDRESTAURANT_FIELD="likedRestaurants";
     private static volatile UserRepository instance;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersCollection = db.collection("users");
@@ -59,11 +61,12 @@ public final class UserRepository {
             String username = user.getDisplayName();
             String uid = user.getUid();
             String email = user.getEmail();
+            List<String> likedRestaurant = new ArrayList<>();
 
-            User userToCreate = new User(uid, username, urlPicture, email);
+            User userToCreate = new User(uid, username, urlPicture, email, likedRestaurant);
 
             Task<DocumentSnapshot> userData = getUserData();
-            // If the user already exist in Firestore, we get his data (isMentor)
+            // If the user already exist in Firestore
             assert userData != null;
             userData.addOnSuccessListener(documentSnapshot -> {
                 this.getUsersCollection().document(uid).set(userToCreate);
@@ -95,6 +98,10 @@ public final class UserRepository {
     public Task<Void> updateUserChoice(String placeName){
         String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
         return this.getUsersCollection().document(uid).update(USERCHOICE_FIELD, placeName);
+    }
+    public Task<Void> updateUserLikedRestaurant(String placeName){
+        String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
+        return this.getUsersCollection().document(uid).update(USERLIKEDRESTAURANT_FIELD, FieldValue.arrayUnion(placeName));
     }
 
     @Nullable
@@ -128,11 +135,11 @@ public final class UserRepository {
         return taskCompletionSource.getTask();
     }
 
-    public Task<List<User>> getRestaurantUsers(String place_id){
+    public Task<List<User>> getRestaurantUsers(String placeId){
 
         TaskCompletionSource<List<User>> taskCompletionSource = new TaskCompletionSource<>();
         List<User> userList = new ArrayList<>();
-        usersCollection.whereEqualTo("choiceId", place_id)
+        usersCollection.whereEqualTo("choiceId", placeId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -143,5 +150,9 @@ public final class UserRepository {
                 })
                 .addOnFailureListener(taskCompletionSource::setException);
         return taskCompletionSource.getTask();
+    }
+
+    public Task<User> getCurrentUserInFirestore(String userId){
+        return null;
     }
 }

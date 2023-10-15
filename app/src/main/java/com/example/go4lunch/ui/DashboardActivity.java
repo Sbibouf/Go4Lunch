@@ -7,50 +7,46 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityDashboardBinding;
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.ui.fragments.ListFragment;
 import com.example.go4lunch.ui.fragments.MapFragment;
 import com.example.go4lunch.ui.fragments.UsersFragment;
-import com.example.go4lunch.userManager.UserManager;
-import com.example.go4lunch.viewModel.DashboardViewModel;
-import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
+import com.example.go4lunch.viewModel.DashboardListMapViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseUser;
-
-
-
 
 
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
-    private DashboardViewModel mDashboardViewModel;
+    private DashboardListMapViewModel mDashboardListMapViewModel;
     MapFragment mMapFragment = MapFragment.newInstance();
     ListFragment mListFragment = ListFragment.newInstance();
     UsersFragment mUsersFragment = UsersFragment.newInstance();
-    private NearByRestaurantViewModel mNearByRestaurantViewModel;
     private LocationManager mLocationManager;
     double latitude, longitude;
     Location location;
+    private String userChoice= "";
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -122,12 +118,22 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
             case R.id.logout:
 
-                mDashboardViewModel.signOut(DashboardActivity.this).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDashboardListMapViewModel.signOut(DashboardActivity.this).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         finish();
                     }
                 });
+                return true;
+
+            case R.id.your_lunch:
+                Intent intent = new Intent(this, DetailRestaurantActivity.class);
+                if(userChoice!=null){
+                    intent.putExtra("placeId", userChoice);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this,"Vous n'avez pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
+                }
 
         }
         return false;
@@ -142,11 +148,11 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
     private void initViewModel(){
 
-        mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-        mDashboardViewModel.fetchUser();
-        mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
-        mNearByRestaurantViewModel.fetchData(latitude,longitude);
-        mNearByRestaurantViewModel.fetchUsers();
+        mDashboardListMapViewModel = new ViewModelProvider(this).get(DashboardListMapViewModel.class);
+        mDashboardListMapViewModel.fetchData(latitude,longitude);
+        //mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
+        //mNearByRestaurantViewModel.fetchData(latitude,longitude);
+        //mNearByRestaurantViewModel.fetchUsers();
     }
 
     // 1 - Configure Toolbar
@@ -178,20 +184,21 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         TextView userName = headerView.findViewById(R.id.tv_user_name);
         TextView userMail = headerView.findViewById(R.id.tv_user_mail);
 
-        mDashboardViewModel.getUserMutableLiveData().observe(this, user->{
-            userName.setText(user.getDisplayName());
+        mDashboardListMapViewModel.getUserMutableLiveData().observe(this, user->{
+            userName.setText(user.getName());
             userMail.setText(user.getEmail());
-            if(user.getPhotoUrl()!=null){
-                setUserPhoto(user.getPhotoUrl());
+            if(user.getAvatar()!=null){
+                setUserPhoto(user.getAvatar());
             }
             else {
 
                 mUserAvatar.setImageResource(R.mipmap.ic_avatar);
             }
+            userChoice=user.getChoiceId();
         });
     }
 
-    private void setUserPhoto(Uri userPhoto){
+    private void setUserPhoto(String userPhoto){
         Glide.with(this)
                 .load(userPhoto)
                 .apply(RequestOptions.circleCropTransform())
@@ -216,6 +223,24 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         }
 
     }
+    public void getUserChoice(){
 
+        mDashboardListMapViewModel.fetchCurrentUser();
+        mDashboardListMapViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                userChoice=user.getChoiceId();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUserChoice();
+        mDashboardListMapViewModel.fetchData(latitude,longitude);
+        mDashboardListMapViewModel.fetchUsers();
+
+    }
 
 }

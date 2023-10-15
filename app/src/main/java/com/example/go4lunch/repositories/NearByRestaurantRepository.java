@@ -95,9 +95,10 @@ public class NearByRestaurantRepository {
                         float distanceRestaurant = currentLocation.distanceTo(restaurantLocation);
                         DecimalFormat decimalFormat = new DecimalFormat("#");
                         String distanceRestaurantString = decimalFormat.format(distanceRestaurant);
+                        int rating = restaurants.getResults().get(i).getRating().intValue();
 
 
-                        Restaurant restaurant = new Restaurant(restaurantLat,restaurantLong,restaurantName,restaurantID, restaurantAddress, restaurantIsOpen, distanceRestaurantString, photoUrl);
+                        Restaurant restaurant = new Restaurant(restaurantLat,restaurantLong,restaurantName,restaurantID, restaurantAddress, restaurantIsOpen, distanceRestaurantString, photoUrl, rating);
                         mRestaurantList.add(restaurant);
 
 

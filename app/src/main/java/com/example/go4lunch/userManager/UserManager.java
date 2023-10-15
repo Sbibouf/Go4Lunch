@@ -7,6 +7,8 @@ import com.example.go4lunch.repositories.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 public class UserManager {
 
     private static volatile UserManager instance;
@@ -42,8 +44,15 @@ public class UserManager {
         return userRepository.updateUsername(username);
     }
 
-    public Task<Void> updateUserChoice(String placeId){
-        return userRepository.updateUserChoice(placeId);
+    public Task<Void> updateUserChoice(String placeName){
+        return userRepository.updateUserChoice(placeName);
+    }
+
+    public Task<Void> updateUserChoiceId(String placeId){
+        return userRepository.updateUserChoiceId(placeId);
+    }
+    public Task<Void> addLikedRestaurant(String placeName){
+        return userRepository.updateUserLikedRestaurant(placeName);
     }
 
     public Boolean isCurrentUserLogged() {
@@ -61,4 +70,8 @@ public class UserManager {
     public Task<Void> deleteUser(Context context){
         return userRepository.deleteUser(context);
     }
+
+    public Task<List<User>> getAllUsers(){return userRepository.getAllUsers();}
+
+    public Task<List<User>> getRestaurantUsers(String placeId){return userRepository.getRestaurantUsers(placeId);}
 }

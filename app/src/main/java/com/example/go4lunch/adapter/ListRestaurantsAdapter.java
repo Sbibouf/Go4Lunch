@@ -57,7 +57,7 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView mTitre, mAdress, mOpeningHours, mDistance, mUsersList;
-        ImageView mIcone, mFav, mPhoto;
+        ImageView mIcone, mFav, mPhoto, mRating1, mRating2, mRating3, mRating4, mRating5;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,8 +69,15 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
             mIcone = itemView.findViewById(R.id.icone_resto);
             mPhoto = itemView.findViewById(R.id.iv_restaurant);
             mUsersList = itemView.findViewById(R.id.users_choice);
+            mRating1 = itemView.findViewById(R.id.iv_rate_1_star);
+            mRating2 = itemView.findViewById(R.id.iv_rate_2_star);
+            mRating3 = itemView.findViewById(R.id.iv_rate_3_star);
+            mRating4 = itemView.findViewById(R.id.iv_rate_4_star);
+            mRating5 = itemView.findViewById(R.id.iv_rate_5_star);
+
         }
         public void bind(Restaurant restaurant){
+            int rating = restaurant.getRating();
 
             mTitre.setText(restaurant.getName());
             mAdress.setText(restaurant.getAddress());
@@ -92,7 +99,24 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
                         .apply(RequestOptions.centerCropTransform())
                         .into(mPhoto);
             }
-            mUsersList.setText(""+restaurant.getUsersList().size());
+            mUsersList.setText(""+restaurant.getCustumersNumber());
+
+            if(rating>=1){
+                mRating1.setVisibility(View.VISIBLE);
+            }
+            if(rating>=2){
+                mRating2.setVisibility(View.VISIBLE);
+            }
+            if(rating>=3){
+                mRating3.setVisibility(View.VISIBLE);
+            }
+            if(rating>=4){
+                mRating4.setVisibility(View.VISIBLE);
+            }
+            if(rating>=5){
+                mRating5.setVisibility(View.VISIBLE);
+            }
+
 
         }
     }

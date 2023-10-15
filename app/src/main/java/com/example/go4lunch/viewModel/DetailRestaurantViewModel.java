@@ -10,6 +10,7 @@ import com.example.go4lunch.repositories.NearByRestaurantRepository;
 import com.example.go4lunch.repositories.UserRepository;
 import com.example.go4lunch.service.DetailRestaurantCallback;
 import com.example.go4lunch.service.RestaurantCallback;
+import com.example.go4lunch.userManager.UserManager;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
@@ -18,13 +19,16 @@ import java.util.List;
 public class DetailRestaurantViewModel extends ViewModel {
 
     NearByRestaurantRepository mNearByRestaurantRepository;
-    UserRepository mUserRepository;
+    private final UserManager mUserManager;
+    private final UserRepository mUserRepository;
     MutableLiveData<DetailRestaurant> mMutableLiveData = new MutableLiveData<>();
     MutableLiveData<List<User>> mListMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<User> mUserMutableLiveData = new MutableLiveData<>();
 
     public DetailRestaurantViewModel() {
         mNearByRestaurantRepository = NearByRestaurantRepository.getInstance();
-        mUserRepository = UserRepository.getInstance();
+        mUserManager = UserManager.getInstance();
+        mUserRepository= UserRepository.getInstance();
 
     }
 
@@ -50,12 +54,20 @@ public class DetailRestaurantViewModel extends ViewModel {
     }
     public MutableLiveData<List<User>> getListMutableLiveData(){return mListMutableLiveData;}
 
+    public MutableLiveData<User> getUserMutableLiveData() {
+        return mUserMutableLiveData;
+    }
+
     public void updateUserChoiceId(String placeId){
-        mUserRepository.updateUserChoiceId(placeId);
+        mUserManager.updateUserChoiceId(placeId);
     }
     public void updateUserChoice(String placeName){
-        mUserRepository.updateUserChoice(placeName);
+        mUserManager.updateUserChoice(placeName);
     }
+    public void getCurrentUserData(){mUserManager.getUserData().addOnSuccessListener(user -> {
+        mUserMutableLiveData.setValue(user);
+    });}
+    public void addLikedRestaurants(String placeName){mUserManager.addLikedRestaurant(placeName);}
 
     public FirebaseUser getCurrentUser(){
         return mUserRepository.getCurrentUser();

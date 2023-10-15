@@ -20,8 +20,7 @@ import com.example.go4lunch.databinding.FragmentListBinding;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ItemClickSupport;
 import com.example.go4lunch.ui.DetailRestaurantActivity;
-import com.example.go4lunch.viewModel.NearByRestaurantViewModel;
-import com.example.go4lunch.viewModel.UsersViewModel;
+import com.example.go4lunch.viewModel.DashboardListMapViewModel;
 
 import java.util.List;
 
@@ -32,9 +31,10 @@ import java.util.List;
  */
 public class ListFragment extends Fragment {
 
-    NearByRestaurantViewModel mNearByRestaurantViewModel;
+    DashboardListMapViewModel mDashboardListMapViewModel;
     FragmentListBinding mFragmentListBinding;
     private ListRestaurantsAdapter mAdapter;
+    private Boolean shouldRefreshOnResume = false;
 
     public ListFragment() {
         // Required empty public constructor
@@ -63,16 +63,21 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerView();
         initViewModel();
+        initRecyclerView();
+        getData();
         configureOnRecyclerView();
+
     }
 
     public void initViewModel(){
-        mNearByRestaurantViewModel = new ViewModelProvider(requireActivity()).get(NearByRestaurantViewModel.class);
-        mNearByRestaurantViewModel.fetchUsersListRestaurant();
-        mNearByRestaurantViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), this::updateList);
+        mDashboardListMapViewModel = new ViewModelProvider(requireActivity()).get(DashboardListMapViewModel.class);
 
+
+    }
+    public void getData(){
+        mDashboardListMapViewModel.fetchUsersListRestaurant();
+        mDashboardListMapViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), this::updateList);
     }
 
     private void initRecyclerView(){
@@ -98,7 +103,19 @@ public class ListFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        shouldRefreshOnResume = true;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        initRecyclerView();
+        getData();
+        configureOnRecyclerView();
+        getActivity().setTitle("I'm Hungry!");
+
     }
+
 }
