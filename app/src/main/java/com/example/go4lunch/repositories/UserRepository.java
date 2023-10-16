@@ -20,8 +20,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+//Repository of user that can create update and delete from firestore
 public final class UserRepository {
+
+    //Variables
 
     private static final String COLLECTION_NAME = "users";
     private static final String USERNAME_FIELD = "username";
@@ -33,8 +35,10 @@ public final class UserRepository {
     CollectionReference usersCollection = db.collection("users");
 
 
+    //Constructor
     private UserRepository() { }
 
+    //Singleton
     public static UserRepository getInstance() {
         UserRepository result = instance;
         if (result != null) {
@@ -90,34 +94,41 @@ public final class UserRepository {
         return this.getUsersCollection().document(uid).update(USERNAME_FIELD, username);
     }
 
+    //Update User UserchoiceId
     public Task<Void> updateUserChoiceId(String placeId){
         String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
         return this.getUsersCollection().document(uid).update(USERCHOICEID_FIELD, placeId);
     }
 
+    //Update User Userchoice
     public Task<Void> updateUserChoice(String placeName){
         String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
         return this.getUsersCollection().document(uid).update(USERCHOICE_FIELD, placeName);
     }
+    //Update User UserLikedRestaurants
     public Task<Void> updateUserLikedRestaurant(String placeName){
         String uid = Objects.requireNonNull(this.getCurrentUser()).getUid();
         return this.getUsersCollection().document(uid).update(USERLIKEDRESTAURANT_FIELD, FieldValue.arrayUnion(placeName));
     }
 
+    //Get Current User from Firestore
     @Nullable
     public FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-
+    //SignOut user from Firestore
     public Task<Void> signOut(Context context){
         return AuthUI.getInstance().signOut(context);
     }
 
+    //Delete User from Firestore
     public Task<Void> deleteUser(Context context) {
 
         return AuthUI.getInstance().delete(context);
     }
+
+    //Get all Users from Firestore
 
     public Task<List<User>> getAllUsers(){
 
@@ -134,6 +145,8 @@ public final class UserRepository {
 
         return taskCompletionSource.getTask();
     }
+
+    //Get Users restaurant
 
     public Task<List<User>> getRestaurantUsers(String placeId){
 
@@ -152,7 +165,4 @@ public final class UserRepository {
         return taskCompletionSource.getTask();
     }
 
-    public Task<User> getCurrentUserInFirestore(String userId){
-        return null;
-    }
 }

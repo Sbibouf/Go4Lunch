@@ -7,25 +7,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.UsersChoiceAdapter;
 import com.example.go4lunch.databinding.ActivityDetailRestaurantBinding;
-import com.example.go4lunch.model.DetailRestaurant;
-import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.model.RestaurantDetail;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.viewModel.DetailRestaurantViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
-public class DetailRestaurantActivity extends AppCompatActivity {
+public class RestaurantDetailActivity extends AppCompatActivity {
 
     private ActivityDetailRestaurantBinding mActivityDetailRestaurantBinding;
     private String placeId ="";
@@ -69,7 +65,6 @@ public class DetailRestaurantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mDetailRestaurantViewModel.addLikedRestaurants(placeName);
-                mDetailRestaurantViewModel.getCurrentUserData();
                 getCurrentUserData();
 
             }
@@ -109,7 +104,6 @@ public class DetailRestaurantActivity extends AppCompatActivity {
         mDetailRestaurantViewModel = new ViewModelProvider(this).get(DetailRestaurantViewModel.class);
         mDetailRestaurantViewModel.fetchDatas(placeId);
         mDetailRestaurantViewModel.fetchRestaurantUsers(placeId);
-        mDetailRestaurantViewModel.getCurrentUserData();
     }
 
 
@@ -131,21 +125,19 @@ public class DetailRestaurantActivity extends AppCompatActivity {
     }
 
     public void getDetailRestaurant(){
-        mDetailRestaurantViewModel.getMutableLiveData().observe(this, new Observer<DetailRestaurant>() {
+        mDetailRestaurantViewModel.getMutableLiveData().observe(this, new Observer<RestaurantDetail>() {
             @Override
-            public void onChanged(DetailRestaurant detailRestaurant) {
-                mActivityDetailRestaurantBinding.titleRestaurantDetail.setText(detailRestaurant.getName());
-                mActivityDetailRestaurantBinding.addressRestaurantDetail.setText(detailRestaurant.getAddress());
+            public void onChanged(RestaurantDetail restaurantDetail) {
+                mActivityDetailRestaurantBinding.titleRestaurantDetail.setText(restaurantDetail.getName());
+                mActivityDetailRestaurantBinding.addressRestaurantDetail.setText(restaurantDetail.getAddress());
                 Glide.with(getApplicationContext())
-                        .load(detailRestaurant.getPhotoUrl())
+                        .load(restaurantDetail.getPhotoUrl())
                         .into(mActivityDetailRestaurantBinding.restaurantDetailPhoto);
-                phone_number= detailRestaurant.getPhone_number();
-                website = detailRestaurant.getWebsite();
-                placeName = detailRestaurant.getName();
+                phone_number= restaurantDetail.getPhone_number();
+                website = restaurantDetail.getWebsite();
+                placeName = restaurantDetail.getName();
             }
         });
-
-
 
 
 
@@ -185,7 +177,6 @@ public class DetailRestaurantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mDetailRestaurantViewModel.getCurrentUserData();
         getCurrentUserData();
     }
 }

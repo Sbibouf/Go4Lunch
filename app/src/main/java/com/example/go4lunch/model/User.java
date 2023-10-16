@@ -11,17 +11,14 @@ import java.util.List;
 
 public class User implements Serializable {
 
-    /**
-     * Variables name, lastName, avatar
-     */
+    //Variables
+
     private String name, avatar, choice, email, id, choiceId;
     private List<String> likedRestaurants;
 
 
 
-    /**
-     * Constructors
-     */
+    // Constructors
 
     public User(String id, String name, String avatar, String email, List<String> likedRestaurants ) {
         this.name = name;
@@ -35,12 +32,12 @@ public class User implements Serializable {
 
     }
 
+    //Empty constructor for calls
+
     public User() {
     }
 
-    /**
-     * Getters and setters
-     */
+    // Getters and setters
 
 
     public String getEmail() {

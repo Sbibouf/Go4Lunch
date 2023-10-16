@@ -3,14 +3,19 @@ package com.example.go4lunch.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailRestaurant {
+public class RestaurantDetail {
+
+    //Variables
 
     String name, phone_number, website, address, photoUrl;
     float rating;
     List<User> users;
     String id;
 
-    public DetailRestaurant(String name, String phone_number, float rating, String website, String id, String address, String photoUrl) {
+
+    //Constructor
+
+    public RestaurantDetail(String name, String phone_number, float rating, String website, String id, String address, String photoUrl) {
         this.name = name;
         this.phone_number = phone_number;
         this.rating = rating;
@@ -21,8 +26,12 @@ public class DetailRestaurant {
         users = new ArrayList<>();
     }
 
-    public DetailRestaurant() {
+    //Empty constructor for calls
+
+    public RestaurantDetail() {
     }
+
+    // Getters ans setters
 
     public String getName() {
         return name;

@@ -17,21 +17,19 @@ import com.example.go4lunch.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Adapter of the recylcer view that shows the list of co workers that choose a specific place
 public class UsersChoiceAdapter extends RecyclerView.Adapter<UsersChoiceAdapter.ViewHolder> {
 
+    //Variables
     private List<User> mUserChoice;
 
+    //Constructor
     public UsersChoiceAdapter() {
         mUserChoice = new ArrayList<>();
     }
 
-    public void updateRestaurant(List<User> users){
-        this.mUserChoice.clear();
-        this.mUserChoice.addAll(users);
-        notifyDataSetChanged();
-    }
 
+    //Override methods
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,6 +49,8 @@ public class UsersChoiceAdapter extends RecyclerView.Adapter<UsersChoiceAdapter.
     public int getItemCount() {
         return mUserChoice.size();
     }
+
+    //Methods to bind update and get the elements
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         /**
@@ -83,5 +83,10 @@ public class UsersChoiceAdapter extends RecyclerView.Adapter<UsersChoiceAdapter.
                 choiceWorkmate.setText(""+user.getName()+" is eating here");
 
         }
+    }
+    public void updateRestaurant(List<User> users){
+        this.mUserChoice.clear();
+        this.mUserChoice.addAll(users);
+        notifyDataSetChanged();
     }
 }

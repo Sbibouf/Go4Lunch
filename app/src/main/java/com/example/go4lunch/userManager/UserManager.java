@@ -2,6 +2,8 @@ package com.example.go4lunch.userManager;
 
 import android.content.Context;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.repositories.UserRepository;
 import com.google.android.gms.tasks.Task;
@@ -13,6 +15,7 @@ public class UserManager {
 
     private static volatile UserManager instance;
     private UserRepository userRepository;
+    private MutableLiveData<User> mUserMutableLiveData = new MutableLiveData<>();
 
     private UserManager() {
         userRepository = UserRepository.getInstance();
@@ -74,4 +77,8 @@ public class UserManager {
     public Task<List<User>> getAllUsers(){return userRepository.getAllUsers();}
 
     public Task<List<User>> getRestaurantUsers(String placeId){return userRepository.getRestaurantUsers(placeId);}
+
+    public MutableLiveData<User> getUserMutableLiveData(){
+        return mUserMutableLiveData;
+    }
 }

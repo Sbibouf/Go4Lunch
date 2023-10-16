@@ -5,9 +5,9 @@ import static com.example.go4lunch.BuildConfig.MAPS_API_KEY;
 import android.location.Location;
 import android.util.Log;
 
-import com.example.go4lunch.model.DetailRestaurant;
-import com.example.go4lunch.pojo.detailRestaurant.DetailRestaurantApi;
-import com.example.go4lunch.pojo.detailRestaurant.PhotoDetail;
+import com.example.go4lunch.model.RestaurantDetail;
+import com.example.go4lunch.pojo.restaurantDetail.RestaurantDetailApi;
+import com.example.go4lunch.pojo.restaurantDetail.PhotoDetail;
 import com.example.go4lunch.pojo.restaurants.NearbyRestaurant;
 import com.example.go4lunch.pojo.restaurants.OpeningHours;
 import com.example.go4lunch.pojo.restaurants.Photo;
@@ -26,13 +26,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+//Repository that makes API calls to get restaurants datas
 public class NearByRestaurantRepository {
 
+    //Variables
     private final RestaurantApi mRestaurantApi;
     private static volatile NearByRestaurantRepository instance;
     private List<Restaurant> mRestaurantList = new ArrayList<>();
-    private DetailRestaurant mDetailRestaurant;
+    private RestaurantDetail mRestaurantDetail;
 
 
     // Constructor
@@ -41,6 +42,8 @@ public class NearByRestaurantRepository {
         mRestaurantApi = RetrofitService.getInterface();
 
     }
+
+    //Singleton
 
     public static NearByRestaurantRepository getInstance() {
         NearByRestaurantRepository result = instance;
@@ -54,6 +57,10 @@ public class NearByRestaurantRepository {
             return instance;
         }
     }
+
+    //Methods that make API calls
+
+    //Get all nearby restaurant depending on latitude and longitude location
 
     public void getNearbyRestaurantFromApi(double lat, double longi, RestaurantCallback callback){
 
@@ -114,28 +121,30 @@ public class NearByRestaurantRepository {
         });
     }
 
+    //Get all detail from one restaurant
+
     public void getDetailRestaurantFromApi(String placeId, DetailRestaurantCallback callback){
 
-        Call<DetailRestaurantApi> detailRestaurantCall = mRestaurantApi.getRestaurantDetail(""+placeId,MAPS_API_KEY);
+        Call<RestaurantDetailApi> detailRestaurantCall = mRestaurantApi.getRestaurantDetail(""+placeId,MAPS_API_KEY);
         String url = detailRestaurantCall.request().url().toString();
         Log.d("DetailRestaurantCall", "Request URL: " + url);
-        detailRestaurantCall.enqueue(new Callback<DetailRestaurantApi>() {
+        detailRestaurantCall.enqueue(new Callback<RestaurantDetailApi>() {
             @Override
-            public void onResponse(Call<DetailRestaurantApi> call, Response<DetailRestaurantApi> response) {
-                DetailRestaurantApi detailRestaurantApi = response.body();
-                String name = detailRestaurantApi.getResult().getName();
-                String id = detailRestaurantApi.getResult().getPlace_id();
+            public void onResponse(Call<RestaurantDetailApi> call, Response<RestaurantDetailApi> response) {
+                RestaurantDetailApi restaurantDetailApi = response.body();
+                String name = restaurantDetailApi.getResult().getName();
+                String id = restaurantDetailApi.getResult().getPlace_id();
                 String phone = "";
                 String website = "";
-                String address = detailRestaurantApi.getResult().getVicinity();
+                String address = restaurantDetailApi.getResult().getVicinity();
                 List<PhotoDetail> photoRef = new ArrayList<>();
                 String photoReference ="";
                 String photoUrl = "";
-                photoRef = detailRestaurantApi.getResult().getPhotos();
-                if(detailRestaurantApi.getResult().getInternationalPhoneNumber()!=null){
-                    phone = detailRestaurantApi.getResult().getInternationalPhoneNumber();
-                }else if (detailRestaurantApi.getResult().getWebsite()!=null){
-                    website = detailRestaurantApi.getResult().getWebsite();
+                photoRef = restaurantDetailApi.getResult().getPhotos();
+                if(restaurantDetailApi.getResult().getInternationalPhoneNumber()!=null){
+                    phone = restaurantDetailApi.getResult().getInternationalPhoneNumber();
+                }else if (restaurantDetailApi.getResult().getWebsite()!=null){
+                    website = restaurantDetailApi.getResult().getWebsite();
                 }
                 if(photoRef!=null){
                     photoReference = photoRef.get(0).getPhotoReference();
@@ -143,13 +152,13 @@ public class NearByRestaurantRepository {
                 }
 
 
-                float rating = detailRestaurantApi.getResult().getRating();
-                mDetailRestaurant = new DetailRestaurant(name, phone, rating, website, id, address, photoUrl);
-                callback.OnRestaurantDetailReceived(mDetailRestaurant);
+                float rating = restaurantDetailApi.getResult().getRating();
+                mRestaurantDetail = new RestaurantDetail(name, phone, rating, website, id, address, photoUrl);
+                callback.OnRestaurantDetailReceived(mRestaurantDetail);
             }
 
             @Override
-            public void onFailure(Call<DetailRestaurantApi> call, Throwable t) {
+            public void onFailure(Call<RestaurantDetailApi> call, Throwable t) {
 
                 Log.e("DetailRestaurantCall", "Call failed: " + t.getMessage());
             }

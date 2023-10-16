@@ -1,5 +1,5 @@
 
-package com.example.go4lunch.pojo.detailRestaurant;
+package com.example.go4lunch.pojo.restaurantDetail;
 
 
 import com.google.gson.annotations.Expose;

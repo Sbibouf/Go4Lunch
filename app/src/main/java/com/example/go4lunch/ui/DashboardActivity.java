@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,17 +37,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
-
+//Activity that deals with the fragments and the navigation drawer
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 
+    //Variables
     private DashboardListMapViewModel mDashboardListMapViewModel;
-    MapFragment mMapFragment = MapFragment.newInstance();
-    ListFragment mListFragment = ListFragment.newInstance();
-    UsersFragment mUsersFragment = UsersFragment.newInstance();
     private LocationManager mLocationManager;
     double latitude, longitude;
     Location location;
-    private String userChoice= "";
+    private String userChoiceExtra= "";
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -76,6 +75,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         configureDrawerLayout();
         configureNavigationView();
         updateDrawerWithUserData();
+        //getUserChoice();
 
     }
 
@@ -90,7 +90,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     }
 
 
-
+    //Menu navigation drawer element options
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -98,21 +98,21 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
             case R.id.map:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, mMapFragment)
+                        .replace(R.id.activity_main_frame_layout, MapFragment.newInstance())
                         .commit();
                 return true;
 
             case R.id.list:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, mListFragment)
+                        .replace(R.id.activity_main_frame_layout, ListFragment.newInstance())
                         .commit();
                 return true;
 
             case R.id.workmates:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, mUsersFragment)
+                        .replace(R.id.activity_main_frame_layout, UsersFragment.newInstance())
                         .commit();
                 return true;
 
@@ -127,13 +127,22 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
                 return true;
 
             case R.id.your_lunch:
-                Intent intent = new Intent(this, DetailRestaurantActivity.class);
-                if(userChoice!=null){
-                    intent.putExtra("placeId", userChoice);
-                    startActivity(intent);
+
+                Intent intentYourLunch = new Intent(this, RestaurantDetailActivity.class);
+                if(userChoiceExtra!=""){
+                    intentYourLunch.putExtra("placeId", userChoiceExtra);
+                    startActivity(intentYourLunch);
                 }else{
-                    Toast.makeText(this,"Vous n'avez pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Vous n'avez pas choisi aujourd'hui", Toast.LENGTH_SHORT).show();
                 }
+
+                return true;
+
+            case R.id.settings:
+                Intent intentSetting = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                intentSetting.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+                startActivity(intentSetting);
+                return true;
 
         }
         return false;
@@ -150,9 +159,11 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
         mDashboardListMapViewModel = new ViewModelProvider(this).get(DashboardListMapViewModel.class);
         mDashboardListMapViewModel.fetchData(latitude,longitude);
-        //mNearByRestaurantViewModel = new ViewModelProvider(this).get(NearByRestaurantViewModel.class);
-        //mNearByRestaurantViewModel.fetchData(latitude,longitude);
-        //mNearByRestaurantViewModel.fetchUsers();
+        mDashboardListMapViewModel.fetchUsers();
+        mDashboardListMapViewModel.fuseLivedata();
+        mDashboardListMapViewModel.getCurrentUser();
+        //mDashboardListMapViewModel.fetchUsersListRestaurant();
+
     }
 
     // 1 - Configure Toolbar
@@ -184,7 +195,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         TextView userName = headerView.findViewById(R.id.tv_user_name);
         TextView userMail = headerView.findViewById(R.id.tv_user_mail);
 
-        mDashboardListMapViewModel.getUserMutableLiveData().observe(this, user->{
+        mDashboardListMapViewModel.getCurrentUserLivedata().observe(this, user->{
             userName.setText(user.getName());
             userMail.setText(user.getEmail());
             if(user.getAvatar()!=null){
@@ -194,7 +205,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
                 mUserAvatar.setImageResource(R.mipmap.ic_avatar);
             }
-            userChoice=user.getChoiceId();
+            userChoiceExtra=user.getChoiceId();
         });
     }
 
@@ -223,24 +234,25 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         }
 
     }
+
+    //Get the chosen restaurant from the User for the menu option "YOUR LUNCH"
     public void getUserChoice(){
 
-        mDashboardListMapViewModel.fetchCurrentUser();
-        mDashboardListMapViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+        mDashboardListMapViewModel.getCurrentUserLivedata().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                userChoice=user.getChoiceId();
+                userChoiceExtra=user.getChoiceId();
             }
         });
     }
 
+    //Refetch datas to updata UI ans see changes
     @Override
     protected void onResume() {
         super.onResume();
-        getUserChoice();
-        mDashboardListMapViewModel.fetchData(latitude,longitude);
         mDashboardListMapViewModel.fetchUsers();
-
+        mDashboardListMapViewModel.getCurrentUser();
+        getUserChoice();
     }
 
 }

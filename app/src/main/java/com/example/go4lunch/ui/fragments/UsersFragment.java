@@ -18,39 +18,34 @@ import android.widget.Toast;
 import com.example.go4lunch.R;
 import com.example.go4lunch.adapter.UsersAdapter;
 import com.example.go4lunch.databinding.FragmentWorkMatesBinding;
-import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.service.ItemClickSupport;
-import com.example.go4lunch.ui.DetailRestaurantActivity;
+import com.example.go4lunch.ui.RestaurantDetailActivity;
 import com.example.go4lunch.viewModel.UsersViewModel;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UsersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+//A fragment that display the list of co-Workers and their choice in a recyclerview
 public class UsersFragment extends Fragment {
 
+    //Variables
     UsersViewModel mUsersViewModel;
     FragmentWorkMatesBinding mFragmentWorkMatesBinding;
     private UsersAdapter mAdapter;
 
-
-
+    //Constructor
     public UsersFragment() {
         // Required empty public constructor
     }
 
 
+    //New instance
     public static UsersFragment newInstance() {
         return new UsersFragment();
     }
+
+
+    //Override methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,10 +76,14 @@ public class UsersFragment extends Fragment {
         configureOnRecyclerView();
     }
 
+    //Viewmodel initialisation
+
     public void initViewModel(){
         mUsersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
         mUsersViewModel.fetcUsers();
     }
+
+    //Recyclerview initialisation
 
     private void initRecyclerView(){
 
@@ -94,9 +93,13 @@ public class UsersFragment extends Fragment {
 
     }
 
+    //Get Users from viewmodel
+
     private void getUsers(){
         mUsersViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), this::updateUsers);
     }
+
+    //Adapter method call to update recylcerview datas
 
     private void updateUsers(List<User>users){
         this.mAdapter.updateUsers(users);
@@ -108,6 +111,8 @@ public class UsersFragment extends Fragment {
         //mUsers.clear();
     }
 
+    //Identify witch element of the recyclerview is clicked on and throw extra for RestaurantDetail Activity
+
     private void configureOnRecyclerView(){
 
         ItemClickSupport.addTo(mFragmentWorkMatesBinding.listWorkmates, R.layout.fragment_work_mates)
@@ -115,7 +120,7 @@ public class UsersFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         User user = mAdapter.getUser(position);
-                        Intent intent = new Intent(getActivity(), DetailRestaurantActivity.class);
+                        Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
                         if(user.getChoiceId()!=null){
                             String userChoice = user.getChoiceId();
                             intent.putExtra("placeId", userChoice);

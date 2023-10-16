@@ -1,10 +1,7 @@
 package com.example.go4lunch.service;
 
-import com.example.go4lunch.model.DetailRestaurant;
-import com.example.go4lunch.model.Restaurant;
-
-import java.util.List;
-
+import com.example.go4lunch.model.RestaurantDetail;
+//Callback interface for restaurant detail
 public interface DetailRestaurantCallback {
-    void OnRestaurantDetailReceived(DetailRestaurant detailRestaurant);
+    void OnRestaurantDetailReceived(RestaurantDetail restaurantDetail);
 }

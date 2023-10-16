@@ -19,23 +19,18 @@ import com.example.go4lunch.ui.fragments.UsersFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Adapter of the recycler view that show the list of co workers and their choice
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>  {
 
-
+    //Variables
     private List<User> usersList;
 
-
+    //Constructor
     public UsersAdapter() {
         usersList = new ArrayList<>() ;
     }
 
-    public void updateUsers(List<User> users){
-        this.usersList.clear();
-        this.usersList.addAll(users);
-        notifyDataSetChanged();
-    }
-
+    //Override methods
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,6 +50,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public int getItemCount() {
         return usersList.size();
     }
+
+    //Methods to bind update and get the elements
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -105,6 +102,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     public User getUser(int position){
         return usersList.get(position);
+    }
+    public void updateUsers(List<User> users){
+        this.usersList.clear();
+        this.usersList.addAll(users);
+        notifyDataSetChanged();
     }
 
 

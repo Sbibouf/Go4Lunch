@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
@@ -18,7 +19,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.DetailRestaurantActivity"
+            android:name=".ui.RestaurantDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <meta-data
@@ -56,8 +57,9 @@
                 android:value="" />
         </activity>
         <service
-            android:name=".service.notifications.NotificationService"
-            android:exported="false">
+            android:name=".service.notification.NotificationService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

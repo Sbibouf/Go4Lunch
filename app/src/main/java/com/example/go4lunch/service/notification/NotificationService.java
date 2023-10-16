@@ -1,4 +1,4 @@
-package com.example.go4lunch.service.notifications;
+package com.example.go4lunch.service.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.ui.DashboardActivity;
+import com.example.go4lunch.ui.LoginActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -34,8 +35,8 @@ public class NotificationService extends FirebaseMessagingService {
     private void sendVisualNotification(RemoteMessage.Notification notification) {
 
         // Create an Intent that will be shown when user will click on the Notification
-       // Intent intent = new Intent(this, DashboardActivity.class);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        Intent intent = new Intent(this, LoginActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         // Create a Channel (Android 8)
         String channelId = getString(R.string.default_notification_channel_id);
@@ -45,7 +46,8 @@ public class NotificationService extends FirebaseMessagingService {
                 new NotificationCompat.Builder(this, channelId)
                         .setContentTitle(notification.getTitle())
                         .setContentText(notification.getBody())
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

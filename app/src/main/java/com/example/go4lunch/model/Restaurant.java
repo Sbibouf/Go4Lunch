@@ -6,9 +6,8 @@ import java.util.List;
 
 public class Restaurant implements Serializable {
 
-    /**
-     * Variable name, adress, type, grade
-     */
+    //Variables
+
     private String name, id, address, distance, photoUrl;
     private double latitude, longitude;
     private int rating;
@@ -31,6 +30,8 @@ public class Restaurant implements Serializable {
         this.rating = rating;
         this.custumersNumber = 0;
     }
+
+    //Empty constructor for calls
 
     public Restaurant(){
 

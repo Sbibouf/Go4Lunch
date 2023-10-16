@@ -21,5 +21,12 @@
 
     <!-- App color -->
     <string name="App_color">#FC7540</string>
+    <string name="msg_token_fmt">message</string>
+
+    <!-- Option-->
+    <string name="your_lunch_title">YOUR LUNCH</string>
+    <string name="settings_title">SETTINGS</string>
+    <string name="logout_title">LOGOUT</string>
+
 
 </resources>

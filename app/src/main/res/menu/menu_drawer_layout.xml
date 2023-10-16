@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/your_lunch"
             android:icon="@drawable/ic_baseline_your_lunch"
-            android:title="YOUR LUNCH" />
+            android:title="@string/your_lunch_title" />
         <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_baseline_settings"
-            android:title="SETTINGS" />
+            android:title="@string/settings_title" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_baseline_logout"
-            android:title="LOGOUT" />
+            android:title="@string/logout_title" />
     </group>
 
 

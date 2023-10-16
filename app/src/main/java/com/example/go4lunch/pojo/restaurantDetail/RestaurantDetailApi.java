@@ -1,11 +1,11 @@
 
-package com.example.go4lunch.pojo.detailRestaurant;
+package com.example.go4lunch.pojo.restaurantDetail;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DetailRestaurantApi {
+public class RestaurantDetailApi {
 
     @SerializedName("html_attributions")
     @Expose

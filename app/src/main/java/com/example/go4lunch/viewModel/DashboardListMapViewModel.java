@@ -2,7 +2,10 @@ package com.example.go4lunch.viewModel;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.go4lunch.model.Restaurant;
@@ -19,26 +22,27 @@ public class DashboardListMapViewModel extends ViewModel {
 
     private final NearByRestaurantRepository mNearByRestaurantRepository;
     private final UserManager mUserManager;
-    private MutableLiveData<User> mUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<User>> mUserMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Restaurant>> mMutableLiveData = new MutableLiveData<>();
+    private MediatorLiveData<List<Restaurant>> mListMediatorLiveData = new MediatorLiveData<>();
+    private MutableLiveData<User> mCurrentUserLivedata = new MutableLiveData<>();
     private List<Restaurant> mRestaurantList = new ArrayList<>();
     private List<User>  mUserList = new ArrayList<>();
 
-    public MutableLiveData<User> getUserMutableLiveData(){
-        return mUserMutableLiveData;
+    public MutableLiveData<User> getCurrentUserLivedata(){
+        return mCurrentUserLivedata;
     }
+    public LiveData<List<Restaurant>> getListRestaurantLiveData(){return mListMediatorLiveData;}
 
     public DashboardListMapViewModel() {
         mNearByRestaurantRepository = NearByRestaurantRepository.getInstance();
         mUserManager = UserManager.getInstance();
-        fetchCurrentUser();
         fetchUsers();
     }
 
-    public void fetchCurrentUser(){
-
+    public void getCurrentUser(){
         mUserManager.getUserData().addOnSuccessListener(user -> {
-            mUserMutableLiveData.setValue(user);
+            mCurrentUserLivedata.setValue(user);
         });
     }
 
@@ -55,7 +59,6 @@ public class DashboardListMapViewModel extends ViewModel {
             @Override
             public void OnRestaurantListReceived(List<Restaurant> restaurantList) {
                 mMutableLiveData.setValue(restaurantList);
-                mRestaurantList = restaurantList;
             }
         });
 
@@ -63,27 +66,45 @@ public class DashboardListMapViewModel extends ViewModel {
 
     public void fetchUsers(){
         mUserManager.getAllUsers().addOnSuccessListener(users -> {
-            mUserList = users;
+            mUserMutableLiveData.setValue(users);
         }).addOnFailureListener(e -> {
 
         });
 
     }
-    public void fetchUsersListRestaurant(){
 
-        for(int i = 0 ; i<mRestaurantList.size(); i++){
-            int  mUserListRestaurant = 0;
-            for(int y = 0 ; y<mUserList.size(); y++){
-                if(mRestaurantList.get(i).getId().equals(mUserList.get(y).getChoiceId())){
+    public void fuseLivedata(){
 
-                    mUserListRestaurant++;
-
-                }
+        mListMediatorLiveData.addSource(mMutableLiveData, new Observer<List<Restaurant>>() {
+            @Override
+            public void onChanged(List<Restaurant> restaurantList) {
+                mRestaurantList = restaurantList;
+                merge();
             }
-            mRestaurantList.get(i).setCustumersNumber(mUserListRestaurant);
-        }
-        mMutableLiveData.setValue(mRestaurantList);
+        });
 
+        mListMediatorLiveData.addSource(mUserMutableLiveData, new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                mUserList = users;
+                merge();
+            }
+        });
+    }
+
+    private void merge(){
+        List<Restaurant> restaurantList = new ArrayList<>();
+                for(Restaurant restaurant : mRestaurantList){
+                    int  mUserListRestaurant = 0;
+                    for(User user: mUserList){
+                        if(restaurant.getName().equals(user.getChoice())){
+                            mUserListRestaurant++;
+                        }
+                    }
+                    restaurant.setCustumersNumber(mUserListRestaurant);
+                    restaurantList.add(restaurant);
+                }
+                mListMediatorLiveData.setValue(restaurantList);
     }
 
 

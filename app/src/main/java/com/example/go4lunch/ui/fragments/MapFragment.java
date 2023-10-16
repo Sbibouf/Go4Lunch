@@ -17,28 +17,32 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+//A fragment that shares the data of the list fragment and display a google map with colored pins
 public class MapFragment extends Fragment {
 
+    //Variables
     private GoogleMap mMap;
     DashboardListMapViewModel mDashboardListMapViewModel;
 
+
+    //Constructor
     public MapFragment() {
         // Required empty public constructor
     }
 
 
+    //New Instance
     public static MapFragment newInstance() {
         MapFragment fragment = new MapFragment();
         return fragment;
     }
+
+
+    //Override methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,16 +67,22 @@ public class MapFragment extends Fragment {
                 mMap.setMyLocationEnabled(true);
 
                 mDashboardListMapViewModel = new ViewModelProvider(requireActivity()).get(DashboardListMapViewModel.class);
-                mDashboardListMapViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
+                mDashboardListMapViewModel.getListRestaurantLiveData().observe(getViewLifecycleOwner(), restaurants -> {
                     for(int i=0; i<restaurants.size(); i++ ){
                         LatLng latLng = new LatLng(restaurants.get(i).getLatitude(), restaurants.get(i).getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(latLng));
+                        if(restaurants.get(i).getCustumersNumber()==0){
+                            mMap.addMarker(new MarkerOptions().position(latLng));
+                        }
+                        else{
+                            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        }
+
                     }
                     LatLng startPoint = new LatLng(restaurants.get(0).getLatitude(), restaurants.get(0).getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(startPoint));
                 });
 
-                mMap.setMinZoomPreference(16);
+                mMap.setMinZoomPreference(17);
             }
         });
 

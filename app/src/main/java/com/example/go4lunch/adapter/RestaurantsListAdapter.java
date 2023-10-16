@@ -14,25 +14,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
-import com.example.go4lunch.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+//Adapter of the recycler view that shows the list of restaurants
+public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsListAdapter.ViewHolder> {
 
-public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurantsAdapter.ViewHolder> {
-
+    //Variables
     private List<Restaurant> mRestaurantList;
 
-    public ListRestaurantsAdapter() {
+
+    //Constructor
+    public RestaurantsListAdapter() {
         mRestaurantList = new ArrayList<>();
     }
 
-    public void updateRestaurant(List<Restaurant> restaurants){
-        this.mRestaurantList.clear();
-        this.mRestaurantList.addAll(restaurants);
-        notifyDataSetChanged();
-    }
+
+    //Override methods
 
     @NonNull
     @Override
@@ -53,6 +52,9 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
     public int getItemCount() {
         return mRestaurantList.size();
     }
+
+
+    //Methods to bind update and get the elements
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -123,6 +125,11 @@ public class ListRestaurantsAdapter extends RecyclerView.Adapter<ListRestaurants
 
     public Restaurant getRestaurant(int position){
         return mRestaurantList.get(position);
+    }
+    public void updateRestaurant(List<Restaurant> restaurants){
+        this.mRestaurantList.clear();
+        this.mRestaurantList.addAll(restaurants);
+        notifyDataSetChanged();
     }
 
 
