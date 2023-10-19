@@ -1,5 +1,9 @@
 package com.example.go4lunch.ui;
 
+import static com.example.go4lunch.BuildConfig.MAPS_API_KEY;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -7,10 +11,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +24,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,9 +40,19 @@ import com.example.go4lunch.ui.fragments.ListFragment;
 import com.example.go4lunch.ui.fragments.MapFragment;
 import com.example.go4lunch.ui.fragments.UsersFragment;
 import com.example.go4lunch.viewModel.DashboardListMapViewModel;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 //Activity that deals with the fragments and the navigation drawer
 public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> implements NavigationBarView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
@@ -43,9 +60,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     //Variables
     private DashboardListMapViewModel mDashboardListMapViewModel;
     private LocationManager mLocationManager;
-    double latitude, longitude;
+    double latitude, longitude, lat, longi;
     Location location;
     private String userChoiceExtra= "";
+    MapFragment mMapFragment = MapFragment.newInstance();
+    ListFragment mListFragment = ListFragment.newInstance();
+    ActivityResultLauncher<Intent> startAutocomplete;
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -68,14 +88,28 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
         mLocationManager= (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        getPosition();
+        getExtras();
         initViewModel();
         configureToolBar();
         configureDrawerLayout();
         configureNavigationView();
         updateDrawerWithUserData();
-        //getUserChoice();
+        initPlaces();
+        setStartAutocomplete();
+
+        binding.searchButtonToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the fields to specify which types of place data to
+                // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getApplicationContext());
+                startAutocomplete.launch(intent);
+            }
+        });
 
     }
 
@@ -89,7 +123,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         }
     }
 
-
     //Menu navigation drawer element options
 
     @Override
@@ -98,14 +131,14 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
             case R.id.map:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, MapFragment.newInstance())
+                        .replace(R.id.activity_main_frame_layout, mMapFragment)
                         .commit();
                 return true;
 
             case R.id.list:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, ListFragment.newInstance())
+                        .replace(R.id.activity_main_frame_layout, mListFragment)
                         .commit();
                 return true;
 
@@ -152,13 +185,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
     // CONFIGURATION
     // ---------------------
 
-
     // 0 - Initialisation du ViewModel
 
     private void initViewModel(){
 
         mDashboardListMapViewModel = new ViewModelProvider(this).get(DashboardListMapViewModel.class);
-        mDashboardListMapViewModel.fetchData(latitude,longitude);
+        mDashboardListMapViewModel.fetchData(lat,longi);
         mDashboardListMapViewModel.fetchUsers();
         mDashboardListMapViewModel.fuseLivedata();
         mDashboardListMapViewModel.getCurrentUser();
@@ -253,6 +285,51 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         mDashboardListMapViewModel.fetchUsers();
         mDashboardListMapViewModel.getCurrentUser();
         getUserChoice();
+    }
+
+    public void getExtras(){
+
+        lat = getIntent().getDoubleExtra("latitude", 0);
+        longi = getIntent().getDoubleExtra("longitude", 0);
+    }
+
+    public void getAutocompleteSearchBar(){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        AutocompleteSupportFragment autocompleteFragment = new AutocompleteSupportFragment();
+        
+        //transaction.replace(R.id.autocomplete_container, autocompleteFragment);
+        transaction.commit();
+    }
+
+    public void initPlaces(){
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), MAPS_API_KEY, Locale.FRANCE);
+        }
+    }
+
+    public void setStartAutocomplete(){
+        startAutocomplete = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            Place place = Autocomplete.getPlaceFromIntent(intent);
+                            if(mMapFragment.isVisible()){
+                                LatLng latLngPlace = place.getLatLng();
+                                mMapFragment.updateMapOnSearch(latLngPlace);
+                            } else if (mListFragment.isVisible()){
+                                String placeId = place.getId();
+                                Intent intent1 = new Intent(getApplicationContext(), RestaurantDetailActivity.class);
+                                intent1.putExtra("placeId", placeId);
+                                startActivity(intent1);
+                            }
+                        }
+                    } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                        // The user canceled the operation.
+                        //Log.i(TAG, "User canceled autocomplete");
+                    }
+                });
     }
 
 }

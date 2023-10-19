@@ -20,11 +20,20 @@ public class DetailRestaurantViewModel extends ViewModel {
     MutableLiveData<RestaurantDetail> mMutableLiveData = new MutableLiveData<>();
     MutableLiveData<List<User>> mListMutableLiveData = new MutableLiveData<>();
     MutableLiveData<User> mUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<User>> test = new MutableLiveData<>();
 
     public DetailRestaurantViewModel() {
         mNearByRestaurantRepository = NearByRestaurantRepository.getInstance();
         mUserManager = UserManager.getInstance();
 
+    }
+
+    public void getRestaurantUser(String placeId){
+        mUserManager.getRestaurantUser(placeId, test);
+    }
+
+    public MutableLiveData<List<User>> getTestLiveData(){
+        return test;
     }
 
     public void fetchDatas(String placeId){
@@ -44,10 +53,13 @@ public class DetailRestaurantViewModel extends ViewModel {
     }
 
 
+
+
     public MutableLiveData<RestaurantDetail> getMutableLiveData(){
         return mMutableLiveData;
     }
     public MutableLiveData<List<User>> getListMutableLiveData(){return mListMutableLiveData;}
+
 
     public MutableLiveData<User> getUserMutableLiveData() {
         return mUserMutableLiveData;

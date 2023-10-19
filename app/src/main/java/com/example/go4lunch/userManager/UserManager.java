@@ -81,4 +81,8 @@ public class UserManager {
     public MutableLiveData<User> getUserMutableLiveData(){
         return mUserMutableLiveData;
     }
+
+    public void getRestaurantUser(String placeId, MutableLiveData<List<User>> listMutableLiveData){
+        userRepository.getRestaurantUSers(placeId, listMutableLiveData);
+    }
 }

@@ -46,6 +46,8 @@ public class DashboardListMapViewModel extends ViewModel {
         });
     }
 
+
+
     public Task<Void> signOut(Context context){
         return mUserManager.signOut(context);
     }

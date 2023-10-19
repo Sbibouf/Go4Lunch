@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.model.User;
 import com.firebase.ui.auth.AuthUI;
@@ -13,9 +14,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,5 +168,25 @@ public final class UserRepository {
                 .addOnFailureListener(taskCompletionSource::setException);
         return taskCompletionSource.getTask();
     }
+
+    public void getRestaurantUSers(String placeId, MutableLiveData<List<User>> userLiveData){
+
+        usersCollection.whereEqualTo("choiceId", placeId)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        return;
+                    }
+
+                    List<User> userList = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            User user = documentSnapshot.toObject(User.class);
+                            userList.add(user);
+                        }
+                    }
+                    userLiveData.setValue(userList);
+                });
+    }
+
 
 }

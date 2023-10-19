@@ -71,10 +71,18 @@ public class MapFragment extends Fragment {
                     for(int i=0; i<restaurants.size(); i++ ){
                         LatLng latLng = new LatLng(restaurants.get(i).getLatitude(), restaurants.get(i).getLongitude());
                         if(restaurants.get(i).getCustumersNumber()==0){
-                            mMap.addMarker(new MarkerOptions().position(latLng));
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(restaurants.get(i).getName())
+                                    .snippet(restaurants.get(i).getAddress())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant_vide)));
                         }
                         else{
-                            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(restaurants.get(i).getName())
+                                    .snippet(restaurants.get(i).getAddress())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant_plein)));
                         }
 
                     }
@@ -94,5 +102,10 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().setTitle("I'm Hungry!");
+    }
+
+    public void updateMapOnSearch(LatLng latLng){
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(latLng));
     }
 }

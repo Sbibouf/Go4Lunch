@@ -6,10 +6,16 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +43,9 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
     private ActivityResultLauncher<Intent> mSignInLauncher;
     private static final int RC_SIGN_IN = 123;
     private LoginViewModel mLoginViewModel;
+    private LocationManager mLocationManager;
+    double latitude, longitude;
+    Location location;
 
     //Override method for the binding
     @Override
@@ -47,6 +56,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
     @Override
    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocationManager= (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mLoginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         signInLauncher();
         checkIfUserIsLogged();
@@ -66,6 +76,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
 
         if(mLoginViewModel.isCurrentUserLogged()){
             binding.button2.setText("C'est parti");
+            obtainLocation();
         }
         else{
             binding.button2.setText("Se connecter");
@@ -74,7 +85,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
             @Override
             public void onClick(View v) {
                 if(mLoginViewModel.isCurrentUserLogged()){
-                    startDashboardActivity();
+                    startDashBoardActivity();
                 }
                 else {
                     startSignInActivity();
@@ -87,8 +98,8 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
     public void signInLauncher(){
         mSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
             if(result.getResultCode()==RESULT_OK){
-                startDashboardActivity();
                 mLoginViewModel.createUser();
+                getPosition();
             }
         });
     }
@@ -150,12 +161,59 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
+    @SuppressLint("MissingPermission")
+    public void getPosition(){
+        try {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
 
-    //Start the dashboard activity
-    public void startDashboardActivity(){
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+            else{
+                obtainLocation();
+                startDashBoardActivity();
 
-        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-        startActivity(intent);
-
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 101) {
+            // Vérifiez si la permission a été accordée
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // La permission a été accordée, obtenez la position
+                obtainLocation();
+            } else {
+                // La permission a été refusée, vous pouvez afficher un message à l'utilisateur ou prendre d'autres mesures
+                Toast.makeText(this, "Permission refusée. L'application ne peut pas accéder à la localisation.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void obtainLocation() {
+        try {
+
+            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startDashBoardActivity(){
+        Intent intent = new Intent(this, DashboardActivity.class);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        startActivity(intent);
+    }
+
+
 }

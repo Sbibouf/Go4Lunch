@@ -91,7 +91,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 mDetailRestaurantViewModel.updateUserChoice(placeName);
                 Toast.makeText(getApplicationContext(),"Vous avez choisi "+placeName+" aujourd'hui", Toast.LENGTH_SHORT).show();
                 mActivityDetailRestaurantBinding.addRestaurantDetail.setImageResource(R.drawable.ic_choose_restaurant);
-                mDetailRestaurantViewModel.fetchRestaurantUsers(placeId);
                 getRestaurantUsers();
             }
         });
@@ -103,7 +102,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         mDetailRestaurantViewModel = new ViewModelProvider(this).get(DetailRestaurantViewModel.class);
         mDetailRestaurantViewModel.fetchDatas(placeId);
-        mDetailRestaurantViewModel.fetchRestaurantUsers(placeId);
+        mDetailRestaurantViewModel.getRestaurantUser(placeId);
     }
 
 
@@ -144,7 +143,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void getRestaurantUsers(){
-        mDetailRestaurantViewModel.getListMutableLiveData().observe(this, new Observer<List<User>>() {
+        mDetailRestaurantViewModel.getTestLiveData().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
                 updateUsersChoice(users);
@@ -159,6 +158,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         this.mAdapter.updateRestaurant(users);
     }
     private void getCurrentUserData(){
+        mDetailRestaurantViewModel.getCurrentUser();
         mDetailRestaurantViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
