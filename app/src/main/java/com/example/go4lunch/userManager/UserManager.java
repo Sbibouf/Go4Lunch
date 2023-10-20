@@ -76,13 +76,12 @@ public class UserManager {
 
     public Task<List<User>> getAllUsers(){return userRepository.getAllUsers();}
 
-    public Task<List<User>> getRestaurantUsers(String placeId){return userRepository.getRestaurantUsers(placeId);}
 
     public MutableLiveData<User> getUserMutableLiveData(){
         return mUserMutableLiveData;
     }
 
     public void getRestaurantUser(String placeId, MutableLiveData<List<User>> listMutableLiveData){
-        userRepository.getRestaurantUSers(placeId, listMutableLiveData);
+        userRepository.getRestaurantUsers(placeId, listMutableLiveData);
     }
 }

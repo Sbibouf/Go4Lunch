@@ -86,7 +86,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                         .into(imgAvatar);
             }
 
-            if(user.getChoiceId()==null){
+            if(user.getChoiceId()==null||user.getChoiceId()==""){
                 choiceWorkmate.setText(""+user.getName()+" hasn't decided yet");
                 choiceWorkmate.setTypeface(null, Typeface.ITALIC);
 

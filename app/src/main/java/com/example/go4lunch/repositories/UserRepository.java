@@ -152,24 +152,7 @@ public final class UserRepository {
 
     //Get Users restaurant
 
-    public Task<List<User>> getRestaurantUsers(String placeId){
-
-        TaskCompletionSource<List<User>> taskCompletionSource = new TaskCompletionSource<>();
-        List<User> userList = new ArrayList<>();
-        usersCollection.whereEqualTo("choiceId", placeId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        User user = documentSnapshot.toObject(User.class);
-                        userList.add(user);
-                    }
-                    taskCompletionSource.setResult(userList);
-                })
-                .addOnFailureListener(taskCompletionSource::setException);
-        return taskCompletionSource.getTask();
-    }
-
-    public void getRestaurantUSers(String placeId, MutableLiveData<List<User>> userLiveData){
+    public void getRestaurantUsers(String placeId, MutableLiveData<List<User>> userLiveData){
 
         usersCollection.whereEqualTo("choiceId", placeId)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {

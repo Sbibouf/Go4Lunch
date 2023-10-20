@@ -109,5 +109,9 @@ public class DashboardListMapViewModel extends ViewModel {
                 mListMediatorLiveData.setValue(restaurantList);
     }
 
+    public void removeLiveDataObservers() {
+        mListMediatorLiveData.removeSource(mMutableLiveData);
+        mListMediatorLiveData.removeSource(mUserMutableLiveData);
+    }
 
 }

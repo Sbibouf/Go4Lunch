@@ -13,6 +13,8 @@
 
     </string-array>
 
+    <string name="search_button_title">Search</string>
+
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,13 +22,33 @@
     <string name="info_no_username_found">no user name found</string>
 
     <!-- App color -->
-    <string name="App_color">#FC7540</string>
+    <string name="app_color">#FC7540</string>
     <string name="msg_token_fmt">message</string>
 
     <!-- Option-->
     <string name="your_lunch_title">YOUR LUNCH</string>
     <string name="settings_title">SETTINGS</string>
     <string name="logout_title">LOGOUT</string>
+    <string name="map_menu_title">Map View</string>
+    <string name="list_menu_title">List View</string>
+    <string name="workmates_menu_title">Workmates</string>
+
+    <!-- Login Activity-->
+    <string name="login_title">Go4Lunch</string>
+    <string name="login_description_title">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="login_button_title">Login</string>
+
+    <!--Detail Activity text-->
+    <string name="restaurant_detail_title">Restaurant Title</string>
+    <string name="restaurant__detail_address">Restaurant Address</string>
+    <string name="call_button_title">CALL</string>
+    <string name="like_button_title">LIKE</string>
+    <string name="website_button_title">WEBSITE</string>
+
+    <!-- Restaurant list and workmates fragments -->
+    <string name="restaurant_open_hours_title">Restaurant opening hours</string>
+    <string name="restaurant_distance_title">Restaurant distance</string>
+    <string name="user_choice_title">User choice title</string>
 
 
 

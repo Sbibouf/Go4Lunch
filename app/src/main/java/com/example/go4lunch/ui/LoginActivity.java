@@ -60,6 +60,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         mLoginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         signInLauncher();
         checkIfUserIsLogged();
+        setupListener();
 
     }
 
@@ -76,15 +77,20 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
 
         if(mLoginViewModel.isCurrentUserLogged()){
             binding.button2.setText("C'est parti");
-            obtainLocation();
+
         }
         else{
             binding.button2.setText("Se connecter");
         }
+
+    }
+
+    public void setupListener(){
         binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mLoginViewModel.isCurrentUserLogged()){
+                    obtainLocation();
                     startDashBoardActivity();
                 }
                 else {
@@ -112,7 +118,8 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers =
                 Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.GoogleBuilder().build());
+                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                        new AuthUI.IdpConfig.TwitterBuilder().build());
 
         // Launch the activity
         mSignInLauncher.launch(AuthUI.getInstance()
@@ -161,6 +168,8 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
+    //Ask for User permission to get the location of the device he is using
+
     @SuppressLint("MissingPermission")
     public void getPosition(){
         try {
@@ -170,7 +179,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
             }
             else{
                 obtainLocation();
-                startDashBoardActivity();
+                checkIfUserIsLogged();
 
             }
         } catch (Exception e){
@@ -178,22 +187,21 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
+    //Handle what to do if the permission is granted or not
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 101) {
-            // Vérifiez si la permission a été accordée
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // La permission a été accordée, obtenez la position
                 obtainLocation();
             } else {
-                // La permission a été refusée, vous pouvez afficher un message à l'utilisateur ou prendre d'autres mesures
                 Toast.makeText(this, "Permission refusée. L'application ne peut pas accéder à la localisation.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    //Obtain the location from GPS_PROVIDER
     @SuppressLint("MissingPermission")
     private void obtainLocation() {
         try {
@@ -208,6 +216,7 @@ public class LoginActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
+    // Start the Dashboard Activity with the extra latitude and longitude
     public void startDashBoardActivity(){
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.putExtra("latitude", latitude);

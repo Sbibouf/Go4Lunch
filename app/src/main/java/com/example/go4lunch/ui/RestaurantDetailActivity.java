@@ -65,6 +65,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mDetailRestaurantViewModel.addLikedRestaurants(placeName);
+                Toast.makeText(getApplicationContext(),"Vous aimez "+ placeName, Toast.LENGTH_SHORT).show();
                 getCurrentUserData();
 
             }
@@ -143,7 +144,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void getRestaurantUsers(){
-        mDetailRestaurantViewModel.getTestLiveData().observe(this, new Observer<List<User>>() {
+        mDetailRestaurantViewModel.getmListLiveData().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
                 updateUsersChoice(users);

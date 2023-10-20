@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+    <string name="hello_blank_fragment">Bonjour fragment vide</string>
+    <string name="navigation_drawer_open">Ouvre le menu de navigation</string>
+    <string name="navigation_drawer_close">Ferme le menu de navigation</string>
+    <string name="info_no_email_found">Aucun email trouvé</string>
+    <string name="info_no_username_found">Aucun nom d\'utilisateur trouvé</string>
+    <string name="msg_token_fmt">message</string>
+    <string name="your_lunch_title">Choix du jour</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="logout_title">Deconnexion</string>
+    <string name="login_title">Go4Lunch</string>
+    <string name="login_description_title">Trouvez un restaurant et inviter vos collaborateurs à déjeuner</string>
+    <string name="login_button_title">Se connecter</string>
+    <string name="restaurant_detail_title">Titre du restaurant</string>
+    <string name="restaurant__detail_address">Adresse du restaurant</string>
+    <string name="call_button_title">Appel</string>
+    <string name="like_button_title">Like</string>
+    <string name="website_button_title">Site_web</string>
+    <string name="restaurant_open_hours_title">Horaires d\'ouverture</string>
+    <string name="restaurant_distance_title">Distance du restaurant</string>
+    <string name="user_choice_title">Choix de l\'utilisateur</string>
+    <string name="notification_title">Vous avez reçu une notification</string>
+    <string name="error_not_connected">Vous devez vous connecter</string>
+    <string name="error_authentication_canceled">Authentification annulée</string>
+    <string name="error_no_internet">Aucune connexion internet</string>
+    <string name="error_unknown_error">Erreur inconnue</string>
+    <string name="connection_succeed">Authentification réussie</string>
+    <string name="button_login_text_logged">Afficher profil</string>
+    <string name="button_login_text_not_logged">Connection</string>
+    <string name="app_color">#FC7540</string>
+    <string name="search_button_title">Chercher</string>
+    <string name="map_menu_title">Vue Carte</string>
+    <string name="list_menu_title">Vue Liste</string>
+    <string name="workmates_menu_title">Collaborateurs</string>
+</resources>

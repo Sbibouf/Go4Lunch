@@ -90,7 +90,7 @@ public class MapFragment extends Fragment {
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(startPoint));
                 });
 
-                mMap.setMinZoomPreference(17);
+                mMap.setMinZoomPreference(16);
             }
         });
 
@@ -104,8 +104,12 @@ public class MapFragment extends Fragment {
         getActivity().setTitle("I'm Hungry!");
     }
 
-    public void updateMapOnSearch(LatLng latLng){
+    public void updateMapOnSearch(LatLng latLng, String title){
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                        .title(title)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant_vide)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
     }
 }

@@ -25,7 +25,7 @@
             android:id="@+id/titre_resto"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:text="titre resto" />
+            android:text="@string/restaurant_detail_title" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,15 +34,15 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="11sp"
-            android:text="adresse resto"/>
+            android:text="@string/restaurant__detail_address"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/heure_resto"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="italic"
-            android:text="heure d'ouverture resto"/>
+            android:text="@string/restaurant_open_hours_title"/>
 
     </LinearLayout>
 
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/distance_resto"
                 android:textSize="12sp"
-                android:text="distance resto"/>
+                android:text="@string/restaurant_distance_title"/>
 
         </TableRow>
 
@@ -103,18 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/iv_rate_5_star"
-                android:visibility="invisible"
-                android:src="@drawable/ic_baseline_star_rating"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/iv_rate_4_star"
-                android:visibility="invisible"
-                android:src="@drawable/ic_baseline_star_rating"/>
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

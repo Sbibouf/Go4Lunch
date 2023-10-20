@@ -74,8 +74,6 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
             mRating1 = itemView.findViewById(R.id.iv_rate_1_star);
             mRating2 = itemView.findViewById(R.id.iv_rate_2_star);
             mRating3 = itemView.findViewById(R.id.iv_rate_3_star);
-            mRating4 = itemView.findViewById(R.id.iv_rate_4_star);
-            mRating5 = itemView.findViewById(R.id.iv_rate_5_star);
 
         }
         public void bind(Restaurant restaurant){
@@ -106,18 +104,13 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
             if(rating>=1){
                 mRating1.setVisibility(View.VISIBLE);
             }
-            if(rating>=2){
+            if(rating>=3){
                 mRating2.setVisibility(View.VISIBLE);
             }
-            if(rating>=3){
+            if(rating>=5){
                 mRating3.setVisibility(View.VISIBLE);
             }
-            if(rating>=4){
-                mRating4.setVisibility(View.VISIBLE);
-            }
-            if(rating>=5){
-                mRating5.setVisibility(View.VISIBLE);
-            }
+
 
 
         }

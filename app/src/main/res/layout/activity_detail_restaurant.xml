@@ -9,6 +9,7 @@
     android:background="#DDDDDD"
     android:orientation="vertical">
 
+
     <FrameLayout
         android:id="@+id/restaurant_detail_layout"
         android:layout_width="match_parent"
@@ -76,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/title_restaurant_detail"
                 android:textSize="16sp"
-                android:text="Titre resto"
+                android:text="@string/restaurant_detail_title"
                 android:textColor="@color/white"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/address_restaurant_detail"
             android:textSize="12sp"
-            android:text="Address restaurant"
+            android:text="@string/restaurant__detail_address"
             android:textColor="@color/white"/>
     </LinearLayout>
 
@@ -118,7 +119,7 @@
                 android:id="@+id/call_button"
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
-                android:contentDescription="call_button"
+                android:contentDescription="@string/call_button_title"
                 android:src="@drawable/ic_baseline_phone_24"
                 app:tint="@color/app_color2" />
             <ImageButton
@@ -127,7 +128,7 @@
                 android:id="@+id/like_button"
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
-                android:contentDescription="like_button"
+                android:contentDescription="@string/like_button_title"
                 android:src="@drawable/ic_baseline_star_24"
                 app:tint="@color/app_color2"/>
             <ImageButton
@@ -136,7 +137,7 @@
                 android:id="@+id/website_button"
                 android:backgroundTint="@color/white"
                 android:layout_weight="1"
-                android:contentDescription="website_button"
+                android:contentDescription="@string/website_button_title"
                 android:src="@drawable/ic_baseline_globe_24"
                 app:tint="@color/app_color2"/>
         </TableRow>
@@ -151,21 +152,21 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/app_color2"
-                android:text="CALL"/>
+                android:text="@string/call_button_title"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/app_color2"
-                android:text="LIKE"/>
+                android:text="@string/like_button_title"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/app_color2"
                 android:layout_weight="1"
-                android:text="WEBSITE"/>
+                android:text="@string/website_button_title"/>
         </TableRow>
 
         <TableRow

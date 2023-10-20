@@ -25,6 +25,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,13 +60,14 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
 
     //Variables
     private DashboardListMapViewModel mDashboardListMapViewModel;
-    private LocationManager mLocationManager;
-    double latitude, longitude, lat, longi;
-    Location location;
+    double latitude, longitude;
     private String userChoiceExtra= "";
+    ActivityResultLauncher<Intent> startAutocomplete;
+
+    //Fragment Instance
     MapFragment mMapFragment = MapFragment.newInstance();
     ListFragment mListFragment = ListFragment.newInstance();
-    ActivityResultLauncher<Intent> startAutocomplete;
+    UsersFragment mUsersFragment = UsersFragment.newInstance();
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -87,7 +89,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         headerView = binding.activityMainNavView.getHeaderView(0);
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.map);
-        mLocationManager= (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         getExtras();
         initViewModel();
         configureToolBar();
@@ -97,25 +98,19 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         initPlaces();
         setStartAutocomplete();
 
-        binding.searchButtonToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Set the fields to specify which types of place data to
-                // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                        .build(getApplicationContext());
-                startAutocomplete.launch(intent);
-            }
-        });
 
+    }
+
+    //Get the search button menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        return true;
     }
 
     @Override
     public void onBackPressed() {
-        // 5 - Handle back click to close menu
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -145,7 +140,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
             case R.id.workmates:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_frame_layout, UsersFragment.newInstance())
+                        .replace(R.id.activity_main_frame_layout, mUsersFragment)
                         .commit();
                 return true;
 
@@ -181,30 +176,48 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         return false;
     }
 
+    // Handle the Search menu option
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.search_button_menu){
+            // Set the fields to specify which types of place data to
+            // return after the user has made a selection.
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
+            // Start the autocomplete intent.
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                    .setTypesFilter(Arrays.asList("restaurant", "cafe"))
+                    .build(getApplicationContext());
+            startAutocomplete.launch(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     // ---------------------
     // CONFIGURATION
     // ---------------------
 
-    // 0 - Initialisation du ViewModel
+    // 0 - ViewModel Initialisation
 
     private void initViewModel(){
 
         mDashboardListMapViewModel = new ViewModelProvider(this).get(DashboardListMapViewModel.class);
-        mDashboardListMapViewModel.fetchData(lat,longi);
+        mDashboardListMapViewModel.fetchData(latitude,longitude);
         mDashboardListMapViewModel.fetchUsers();
         mDashboardListMapViewModel.fuseLivedata();
         mDashboardListMapViewModel.getCurrentUser();
-        //mDashboardListMapViewModel.fetchUsersListRestaurant();
 
     }
 
-    // 1 - Configure Toolbar
+    // 1 - Toolbar Configuration
     private void configureToolBar(){
         this.toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
     }
 
-    // 2 - Configure Drawer Layout
+    // 2 - Drawer Layout Configuration
     private void configureDrawerLayout(){
         this.drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -212,14 +225,13 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         toggle.syncState();
     }
 
-    // 3 - Configure NavigationView
+    // 3 - NavigationView Configuration
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.activity_main_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     // 4 - Update drawer layout with user name, avatar and mail
-
     @SuppressLint("UseCompatLoadingForDrawables")
     private void updateDrawerWithUserData(){
 
@@ -241,6 +253,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
         });
     }
 
+    // 4.1 Set the User photo into the Avatar UI element
     private void setUserPhoto(String userPhoto){
         Glide.with(this)
                 .load(userPhoto)
@@ -248,65 +261,32 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
                 .into(mUserAvatar);
     }
 
-    @SuppressLint("MissingPermission")
-    public void getPosition(){
-        try {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
 
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-            }
-            else{
-                location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-    //Get the chosen restaurant from the User for the menu option "YOUR LUNCH"
-    public void getUserChoice(){
-
-        mDashboardListMapViewModel.getCurrentUserLivedata().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                userChoiceExtra=user.getChoiceId();
-            }
-        });
-    }
-
-    //Refetch datas to updata UI ans see changes
+    //Refetch datas to update UI and see changes
     @Override
     protected void onResume() {
         super.onResume();
         mDashboardListMapViewModel.fetchUsers();
         mDashboardListMapViewModel.getCurrentUser();
-        getUserChoice();
+        updateDrawerWithUserData();
     }
 
+    //Get Location Extra from Login Activity
     public void getExtras(){
 
-        lat = getIntent().getDoubleExtra("latitude", 0);
-        longi = getIntent().getDoubleExtra("longitude", 0);
+        latitude = getIntent().getDoubleExtra("latitude", 0);
+        longitude = getIntent().getDoubleExtra("longitude", 0);
     }
 
-    public void getAutocompleteSearchBar(){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        AutocompleteSupportFragment autocompleteFragment = new AutocompleteSupportFragment();
-        
-        //transaction.replace(R.id.autocomplete_container, autocompleteFragment);
-        transaction.commit();
-    }
 
+    //Places initialisation
     public void initPlaces(){
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), MAPS_API_KEY, Locale.FRANCE);
         }
     }
 
+    //Handle the result of the search
     public void setStartAutocomplete(){
         startAutocomplete = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -317,7 +297,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
                             Place place = Autocomplete.getPlaceFromIntent(intent);
                             if(mMapFragment.isVisible()){
                                 LatLng latLngPlace = place.getLatLng();
-                                mMapFragment.updateMapOnSearch(latLngPlace);
+                                String title = place.getName();
+                                mMapFragment.updateMapOnSearch(latLngPlace, title);
                             } else if (mListFragment.isVisible()){
                                 String placeId = place.getId();
                                 Intent intent1 = new Intent(getApplicationContext(), RestaurantDetailActivity.class);
@@ -332,4 +313,10 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding> im
                 });
     }
 
+    //Remove new observers from mediatorlivedata
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDashboardListMapViewModel.removeLiveDataObservers();
+    }
 }

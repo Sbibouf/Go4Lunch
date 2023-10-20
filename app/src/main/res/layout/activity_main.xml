@@ -52,7 +52,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold|italic"
                 android:textSize="75sp"
-                android:text="Go4Lunch" />
+                android:text="@string/login_title" />
 
 
             <TextView
@@ -62,7 +62,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold|italic"
                 android:textSize="12sp"
-                android:text="Find a nice restaurant and invite your co-workers for lunch!" />
+                android:text="@string/login_description_title" />
 
 
         </LinearLayout>
@@ -84,7 +84,7 @@
                 android:backgroundTint="@color/app_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Se connecter" />
+                android:text="@string/login_button_title" />
 
 
         </FrameLayout>

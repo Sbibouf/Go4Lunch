@@ -24,17 +24,9 @@
                 android:id="@+id/activity_main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleTextColor="@color/white"
                 android:theme="@style/Widget.AppCompat.Toolbar.Button.Navigation"
-                android:background="@color/app_color">
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/search_button_toolbar"
-                    android:layout_gravity="end"
-                    android:backgroundTint="@color/app_color"
-                    android:src="@drawable/ic_baseline_search_24"/>
-            </androidx.appcompat.widget.Toolbar>
+                android:background="@color/app_color"/>
             <FrameLayout
                 android:id="@+id/activity_main_frame_layout"
                 android:layout_width="match_parent"
@@ -76,9 +68,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu"/>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

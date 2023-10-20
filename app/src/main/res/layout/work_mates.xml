@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="blabla"
+        android:text="@string/user_choice_title"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/workmates_avatar"
         app:layout_constraintStart_toEndOf="@+id/workmates_avatar"

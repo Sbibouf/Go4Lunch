@@ -121,7 +121,7 @@ public class UsersFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         User user = mAdapter.getUser(position);
                         Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
-                        if(user.getChoiceId()!=null){
+                        if(user.getChoiceId()!=null&&user.getChoiceId()!=""){
                             String userChoice = user.getChoiceId();
                             intent.putExtra("placeId", userChoice);
                             startActivity(intent);
